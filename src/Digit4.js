@@ -1,41 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Digit from './Digit';
-// import styled from "styled-components";
+// import styled from 'styled-components';
 
-const Digit4 = ({ digValues, divClass, digitClass }) => (
-    <div className={divClass}>
-        <div className={digitClass}>
-            <Digit value={digValues[0]} />
-        </div>
-        <div className={digitClass}>
-            <Digit value={digValues[1]} />
-        </div>
-        <div className={digitClass}>
-            <Digit value={digValues[2]} />
-        </div>
-        <div className={digitClass}>
-            <Digit value={digValues[3]} />
-        </div>
-    </div>
+const Digit4 = (digitVals, valrReadonly) => (
+    <>
+        <Digit value={digitVals[0]} readonly={valrReadonly} first={true} />
+        <Digit value={digitVals[1]} readonly={valrReadonly} />
+        <Digit value={digitVals[2]} readonly={valrReadonly} />
+        <Digit value={digitVals[3]} readonly={valrReadonly} />
+    </>
 );
 
 Digit4.propTypes = {
-  digValues: PropTypes.arrayOf( function(propValue, key, componentName, location, propFullName) {
-    const blankOrSingleNumber = RegExp('^(?:\\d{1}|)$');
-    if ( ! blankOrSingleNumber.test(propValue[key]) ) {
-      return new Error(
-        'Invalid prop `' + propFullName + '` supplied to' +
-        ' `' + componentName + '`. Validation failed.'
-      );
-    }
-  }),
-  divClass: PropTypes.string,
-  digitClass: PropTypes.string,
+    digitVals: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+        const blankOrSingleNumber = RegExp('^(?:\\d{1}|)$');
+        if (!blankOrSingleNumber.test(propValue[key])) {
+            return new Error(
+                'Invalid prop `' +
+                    propFullName +
+                    '` supplied to' +
+                    ' `' +
+                    componentName +
+                    '`. Validation failed.'
+            );
+        }
+    }),
+    divClass: PropTypes.string,
+    digitClass: PropTypes.string,
 };
 
 Digit4.defaultProps = {
-  digvalues: ['', '', '', ''],
+    digitVals: ['', '', '', ''],
+    valrReadonly: PropTypes.bool,
 };
 
 export default Digit4;
