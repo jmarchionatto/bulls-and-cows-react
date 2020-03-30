@@ -14,16 +14,16 @@ const CompBtn = styled.button`
     text-align: right;
 `;
 
-const AskWhoFirst = ({ setWhoFirst }) => (
+const AskWhoFirst = ({ onSetWhoFirst }) => (
     <StlDiv>
         <h3>Who do you want to play first?</h3>
-        <UserBtn onClick={e => setWhoFirst(true, e)}>You</UserBtn>
-        <CompBtn onClick={e => setWhoFirst(false, e)}>Me</CompBtn>
+        <UserBtn onClick={e => onSetWhoFirst(true, e)}>Me</UserBtn>
+        <CompBtn onClick={e => onSetWhoFirst(false, e)}>You</CompBtn>
     </StlDiv>
 );
 
 AskWhoFirst.propTypes = {
-    setWhoFirst: PropTypes.func.isRequired,
+    onSetWhoFirst: PropTypes.func.isRequired,
 };
 
 export default AskWhoFirst;
