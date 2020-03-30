@@ -7,6 +7,7 @@ module.exports = {
     entry: {
         numberchll: './src/Numberchll.js',
     },
+    devtool: 'eval-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Numbers Challenge',
