@@ -11,7 +11,7 @@ const DivTc = styled.div`
 `;
 
 const SubBtn = styled.button`
-    // display: ${props => props.subVisible || 'none'};
+    /* display: ${props => props.subVisible || 'none'}; */
     visibility: ${props => props.visib || 'hidden'};
     width: 4em;
     height: 3em;
@@ -19,24 +19,24 @@ const SubBtn = styled.button`
     border-radius: 10px;
 `;
 
-const Atry = tryProps => (
+const Atry = props => (
     <div>
         <DivTc>
-            <SubBtn type="submit" visib={tryProps.showSendTry}>
+            <SubBtn type="submit" visib={props.showSendTry}>
                 Send Try
             </SubBtn>
         </DivTc>
         <DivTc>
-            <Digit4 {...tryProps.digitVals} readOnly={tryProps.valsRO} />
+            <Digit4 {...props.digitVals} readOnly={props.valsRO} />
         </DivTc>
         <DivTc>
-            <Digit value={tryProps.rg} readOnly={tryProps.rateRO} />
+            <Digit value={props.rg} readOnly={props.rateRO} />
         </DivTc>
         <DivTc>
-            <Digit value={tryProps.rr} readOnly={tryProps.rateRO} />
+            <Digit value={props.rr} readOnly={props.rateRO} />
         </DivTc>
         <DivTc>
-            <SubBtn type="submit" visib={tryProps.showSendTry}>
+            <SubBtn type="submit" visib={props.showRate}>
                 Rate
             </SubBtn>
         </DivTc>
@@ -44,7 +44,17 @@ const Atry = tryProps => (
 );
 
 Atry.propTypes = {
-    tryProps: PropTypes.object.isRequired,
+    digitVals: PropTypes.arrayOf(PropTypes.number),
+    rg: PropTypes.number,
+    rr: PropTypes.number,
+    showSendTry: PropTypes.bool,
+    showRate: PropTypes.bool,
+    valsRO: PropTypes.bool,
+    rateRO: PropTypes.bool,
+};
+
+Atry.ddefaultProps = {
+    digitVals: ['', '', '', ''],
 };
 
 export default Atry;
