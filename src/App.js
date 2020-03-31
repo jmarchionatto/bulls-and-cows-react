@@ -1,7 +1,7 @@
 import React from 'react';
-import UserTriesColumn from './UserTriesColumn';
-import CompTriesColumn from './CompTriesColumn';
 import AskWhoFirst from './AskWhoFirst';
+import TriesPanel from './TriesPanel';
+import Logic from './Logic';
 
 const appState = {
     // true if user tries first
@@ -25,14 +25,28 @@ class App extends React.PureComponent {
     }
 
     setUserTryFirst = userTryFirst => {
-        const newState = {
+        let newState = {
             userTryFirst: userTryFirst,
-            userTries: [...this.state.userTries],
-            compTries: [...this.state.compTries],
         };
+        // add corresponding empty try
+        if (userTryFirst) {
+            newState = {
+                ...newState,
+                userTries: [emptyUserTry],
+            };
+        } else {
+            newState = {
+                ...newState,
+                compTries: [this.getCompTry()],
+            };
+        }
         this.setState(newState, () => {
             console.log('App -> new state: ', this.state);
         });
+    };
+
+    getCompTry = () => {
+        return Logic.getCompTry(this.state);
     };
 
     addCompTry = aTry => {
@@ -58,22 +72,12 @@ class App extends React.PureComponent {
             console.log('rendering AskWhoFirst');
             return <AskWhoFirst onSetWhoFirst={this.setUserTryFirst} />;
         }
-        if (this.state.userTryFirst) {
-            console.log('rendering user column frst');
-            // this.addUserTry(emptyUserTry);
-            return (
-                <div>
-                    <UserTriesColumn tries={this.state.userTries} />
-                    <CompTriesColumn tries={this.state.compTries} />
-                </div>
-            );
-        }
-        console.log('rendering comp column frst');
         return (
-            <div>
-                <CompTriesColumn tries={this.state.compTries} />
-                <UserTriesColumn tries={this.state.userTries} />
-            </div>
+            <TriesPanel
+                userFirst={this.state.userTryFirst}
+                userTries={this.state.userTries}
+                compTries={this.state.compTries}
+            />
         );
     }
 }
