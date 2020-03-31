@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Atry from './Atry';
 
 const ColDiv = styled.div`
-    padding: 8px;
+    border: 0.2em solid #1c6ea4;
+    padding: 0.4em;
 `;
 
 class TriesColumn extends React.PureComponent {
@@ -13,11 +14,17 @@ class TriesColumn extends React.PureComponent {
         this.props.tries.map((aTry, i) => {
             tryElements.push(<Atry key={i} try={aTry} />);
         });
-        return <ColDiv>{tryElements}</ColDiv>;
+        return (
+            <ColDiv>
+                <h3>{this.props.title}</h3>
+                {tryElements}
+            </ColDiv>
+        );
     }
 }
 
 TriesColumn.propTypes = {
+    title: PropTypes.string.isRequired,
     tries: PropTypes.array.isRequired,
 };
 
