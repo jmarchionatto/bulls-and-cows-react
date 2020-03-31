@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import DigitsLine from './DigitsLine';
+// import Atry from './Atry';
 // import GameRow from './GameRow';
 // import App from './App';
 // import AskWhoFirst from './AskWhoFirst';
@@ -18,7 +18,7 @@ import App from './App';
 
 // let digitVals = ['1', '2', '3', '4'];
 // ReactDOM.render(
-//     <DigitsLine
+//     <Atry
 //         digitVals={digitVals}
 //         rg="5"
 //         rr="6"
@@ -58,26 +58,5 @@ import App from './App';
 //     <AskWhoFirst setWhoFirst={f} />,
 //     document.body.appendChild(document.createElement('DIV'))
 // );
-
-const aRow = {
-    userTry: {
-        digitVals: ['9', '8', '7', '6'],
-        rg: '1',
-        rr: '2',
-        valsRO: false,
-        rateRO: false,
-        showSendTry: true,
-        showSendRate: true,
-    },
-    compTry: {
-        digitVals: ['5', '4', '3', '2'],
-        rg: '3',
-        rr: '1',
-        valsRO: false,
-        rateRO: false,
-        showSendTry: true,
-        showSendRate: true,
-    },
-};
 
 ReactDOM.render(<App />, document.body.appendChild(document.createElement('DIV')));

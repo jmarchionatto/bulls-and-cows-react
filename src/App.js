@@ -1,5 +1,6 @@
 import React from 'react';
-import TriesColumn from './TriesColumn';
+import UserTriesColumn from './UserTriesColumn';
+import CompTriesColumn from './CompTriesColumn';
 import AskWhoFirst from './AskWhoFirst';
 
 const appState = {
@@ -7,6 +8,14 @@ const appState = {
     userTryFirst: null,
     userTries: [],
     compTries: [],
+};
+
+const emptyUserTry = {
+    digitVals: [null, null, null, null],
+    rg: null,
+    rr: null,
+    showSendTry: false,
+    valsRO: false,
 };
 
 class App extends React.PureComponent {
@@ -51,18 +60,19 @@ class App extends React.PureComponent {
         }
         if (this.state.userTryFirst) {
             console.log('rendering user column frst');
+            // this.addUserTry(emptyUserTry);
             return (
                 <div>
-                    <TriesColumn tries={this.state.userTries} />
-                    <TriesColumn tries={this.state.compTries} />
+                    <UserTriesColumn tries={this.state.userTries} />
+                    <CompTriesColumn tries={this.state.compTries} />
                 </div>
             );
         }
         console.log('rendering comp column frst');
         return (
             <div>
-                <TriesColumn tries={this.state.compTries} />
-                <TriesColumn tries={this.state.userTries} />
+                <CompTriesColumn tries={this.state.compTries} />
+                <UserTriesColumn tries={this.state.userTries} />
             </div>
         );
     }
