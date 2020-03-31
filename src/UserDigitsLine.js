@@ -1,9 +1,9 @@
 import React from 'react';
-import DigitsLine from './DigitsLine';
+import Atry from './Atry';
 
 /**
- * UserDigitsLine is a DigitsLine which Digit4 fields are read-write and the rr and rg read-only
+ * UserTry is a Atry which Digit4 fields are read-write and the rr and rg read-only
  */
-const UserDigitsLine = () => <DigitsLine valsReadOnly={false} />;
+const UserTry = () => <Atry valsReadOnly={false} />;
 
-export default UserDigitsLine;
+export default UserTry;

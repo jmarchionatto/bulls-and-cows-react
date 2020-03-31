@@ -1,11 +1,11 @@
 import React from 'react';
-import DigitsLine from './DigitsLine';
+import Atry from './Atry';
 
 /**
- * CompDigitsLine is a DigitsLine which Digit4 fields are readonly and the rr and rg not
+ * CompTry is a Atry which Digit4 fields are readonly and the rr and rg not
  *
  * @author Juan Marchionatto
  */
-const CompDigitsLine = () => <DigitsLine valsReadOnly={true} />;
+const CompTry = () => <Atry valsReadOnly={true} />;
 
-export default CompDigitsLine;
+export default CompTry;
