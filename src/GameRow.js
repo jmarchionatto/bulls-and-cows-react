@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DigitsLine from './DigitsLine';
+import Atry from './Atry';
 import styled from 'styled-components';
 
 const RowDiv = styled.div`
@@ -16,7 +16,7 @@ const CellDiv = styled.div`
 const GameRow = ({ aRow }) => (
     <RowDiv className="gamerow">
         <CellDiv>
-            <DigitsLine
+            <Atry
                 digitVals={aRow.userTry.digitVals}
                 rg={aRow.userTry.rg}
                 rr={aRow.userTry.rr}
@@ -27,7 +27,7 @@ const GameRow = ({ aRow }) => (
             />
         </CellDiv>
         <CellDiv>
-            <DigitsLine
+            <Atry
                 digitVals={aRow.compTry.digitVals}
                 rg={aRow.compTry.rg}
                 rr={aRow.compTry.rr}
