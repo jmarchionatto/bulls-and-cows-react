@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import Digit from './Digit';
 // import styled from 'styled-components';
 
-const Digit4 = (digitVals, valrReadonly) => (
-    <>
-        <Digit value={digitVals[0]} readonly={valrReadonly} first={true} />
-        <Digit value={digitVals[1]} readonly={valrReadonly} />
-        <Digit value={digitVals[2]} readonly={valrReadonly} />
-        <Digit value={digitVals[3]} readonly={valrReadonly} />
-    </>
+const Digit4 = (digitVals, readOnly) => (
+    <div>
+        <Digit value={digitVals[0]} readonly={readOnly} first />
+        <Digit value={digitVals[1]} readonly={readOnly} />
+        <Digit value={digitVals[2]} readonly={readOnly} />
+        <Digit value={digitVals[3]} readonly={readOnly} />
+    </div>
 );
 
 Digit4.propTypes = {
@@ -26,13 +26,11 @@ Digit4.propTypes = {
             );
         }
     }),
-    divClass: PropTypes.string,
-    digitClass: PropTypes.string,
+    readOnly: PropTypes.bool,
 };
 
 Digit4.defaultProps = {
     digitVals: ['', '', '', ''],
-    valrReadonly: PropTypes.bool,
 };
 
 export default Digit4;

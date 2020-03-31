@@ -6,34 +6,31 @@ import Digit from '../Digit';
 describe('Digit4', () => {
     let wrapper;
 
-    let digValues = [1, 2, 3, 4];
-    let divClass = 'divClass';
-    let digitClass = 'digitClass';
+    let digitVals = [4, 5, 6, 7],
+        valsRO = true;
 
     beforeEach(() => {
-        wrapper = shallow(<Digit4 digValues={digValues} divClass={divClass} digClass={digitClass} />);
+        wrapper = shallow(<Digit4 digValues={digitVals} readOnly={valsRO} />);
     });
 
-    it('Digit4 has 4 Digit(s) with proper class and values', () => {
-      for (let i = 4; i < 4; i++) {
-        expect(wrapper.childAt(i)).isA(Digit);
-        expect(wrapper.childAt(i).prop('value')).toBe(i+1);
-        expect(wrapper.childAt(i).is('.'+digitClass)).toBe(true);
-      }
+    // it('has 4 Digit(s) with passed values and readonly values', () => {
+    //     for (let i = 0; i < 4; i++) {
+    //         expect(wrapper.childAt(i).type()).toBe(Digit);
+    //         // expect(wrapper.childAt(i).prop('value')).toBe(i);
+    //         expect(wrapper.childAt(i)).toHaveProperty('readonly', true);
+    //     }
+    // });
+
+    it('only first child Digit is first=true', () => {
+        console.log('wrapper: ', wrapper.debug());
+
+        // expect(wrapper.childAt(0)).toHaveProperty('first');
+
+        // expect(wrapper.find("Digit[first]").toBe(true);
+
+        // expect(rendered.props()).to.have.property('maxLength', '10');
+        // expect(wrapper.childAt(1)).toNotHaveProperty('first');
+        // for (let i = 0; i < 4; i++) {
+        // }
     });
-
-    it('digit value validation right regex', () => {
-        const blankOrSingleNumber = RegExp('^(?:\\d{1}|)$');
-
-        expect(blankOrSingleNumber.test('')).toBe(true);
-        expect(blankOrSingleNumber.test('1')).toBe(true);
-        expect(blankOrSingleNumber.test(1)).toBe(true);
-        expect(blankOrSingleNumber.test(11)).toBe(false);
-        expect(blankOrSingleNumber.test('11')).toBe(false);
-    });
-
-    it('parent div has passed class', () => {
-        expect(wrapper.is('.'+divClass)).toBe(true);
-    });
-
 });
