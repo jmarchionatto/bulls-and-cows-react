@@ -8,6 +8,10 @@ const ColDiv = styled.div`
     padding: 0.4em;
 `;
 
+const StH3 = styled.h3`
+    text-align: center;
+`;
+
 class TriesColumn extends React.PureComponent {
     render() {
         let tryElements = [];
@@ -16,7 +20,7 @@ class TriesColumn extends React.PureComponent {
         });
         return (
             <ColDiv>
-                <h3>{this.props.title}</h3>
+                <StH3>{this.props.title}</StH3>
                 {tryElements}
             </ColDiv>
         );

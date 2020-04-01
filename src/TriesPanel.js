@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import UserTriesColumn from './UserTriesColumn';
 import CompTriesColumn from './CompTriesColumn';
 
+const DivT = styled.div`
+    display: table;
+`;
+
 const DivTc = styled.div`
     display: table-cell;
     padding: 8px;
@@ -12,16 +16,29 @@ const DivTc = styled.div`
 
 class TriesPanel extends React.PureComponent {
     render() {
-        let tryCols = [];
         if (this.props.userFirst) {
-            tryCols.push(
-                <UserTriesColumn userTries={this.props.userTries} />,
-                <CompTriesColumn compTries={this.props.compTries} />
+            return (
+                <DivT>
+                    <DivTc>
+                        <UserTriesColumn tries={this.props.userTries} />,
+                    </DivTc>
+                    <DivTc>
+                        <CompTriesColumn tries={this.props.compTries} />
+                    </DivTc>
+                </DivT>
             );
         } else {
-            tryCols.push(<CompTriesColumn />, <UserTriesColumn />);
+            return (
+                <DivT>
+                    <DivTc>
+                        <CompTriesColumn tries={this.props.compTries} />
+                    </DivTc>
+                    <DivTc>
+                        <UserTriesColumn tries={this.props.userTries} />,
+                    </DivTc>
+                </DivT>
+            );
         }
-        return <DivTc>{tryCols}</DivTc>;
     }
 }
 

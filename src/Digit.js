@@ -14,7 +14,7 @@ const InputTxt = styled.input`
     border-left: ${props => (props.first ? '4px' : '0px')} solid #1c6ea4;
 
     font-family: Verdana;
-    font-size: 3em;
+    /* font-size: 3em; */
     color: #27b11e;
     font-weight: bold;
 `;
