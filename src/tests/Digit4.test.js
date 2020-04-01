@@ -9,8 +9,10 @@ describe('Digit4', () => {
     let digitVals = [4, 5, 6, 7],
         valsRO = true;
 
+    let onChFn = jest.fn();
+
     beforeEach(() => {
-        wrapper = shallow(<Digit4 digValues={digitVals} readOnly={valsRO} />);
+        wrapper = shallow(<Digit4 digValues={digitVals} readOnly={valsRO} onDigitCh={onChFn} />);
     });
 
     // it('has 4 Digit(s) with passed values and readonly values', () => {

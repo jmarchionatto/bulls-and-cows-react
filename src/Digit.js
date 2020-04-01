@@ -19,14 +19,22 @@ const InputTxt = styled.input`
     font-weight: bold;
 `;
 
-const Digit = ({ value, first, readOnly }) => (
-    <InputTxt type="text" length="1" value={value} first={first} readonly={readOnly} />
+const Digit = ({ value, readOnly, onCh, first }) => (
+    <InputTxt
+        type="text"
+        length="1"
+        value={value}
+        first={first}
+        readonly={readOnly}
+        onChange={e => onCh(e)}
+    />
 );
 
 Digit.propTypes = {
     value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    first: PropTypes.bool,
     readOnly: PropTypes.bool,
+    onCh: PropTypes.func.isRequired,
+    first: PropTypes.bool,
 };
 
 Digit.defaultProps = {

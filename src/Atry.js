@@ -19,29 +19,55 @@ const SubBtn = styled.button`
     border-radius: 10px;
 `;
 
-const Atry = props => (
-    <div>
-        <DivTc>
-            <SubBtn type="submit" visib={props.showSendTry}>
-                Send Try
-            </SubBtn>
-        </DivTc>
-        <DivTc>
-            <Digit4 {...props.digitVals} readOnly={props.valsRO} />
-        </DivTc>
-        <DivTc>
-            <Digit value={props.rg} readOnly={props.rateRO} />
-        </DivTc>
-        <DivTc>
-            <Digit value={props.rr} readOnly={props.rateRO} />
-        </DivTc>
-        <DivTc>
-            <SubBtn type="submit" visib={props.showRate}>
-                Rate
-            </SubBtn>
-        </DivTc>
-    </div>
-);
+class Atry extends React.PureComponent {
+    onDigitChange = e => {
+        console.log('onDigitChange -> e.target: ', e.target);
+        console.log('onDigitChange -> e.target.value: ', e.target.value);
+        return true;
+    };
+
+    render() {
+        console.log('this.onDigitChange: ', this.onDigitChange);
+
+        return (
+            <div>
+                <DivTc>
+                    <SubBtn type="submit" visib={this.props.showSendTry}>
+                        Send Try
+                    </SubBtn>
+                </DivTc>
+                <DivTc>
+                    <Digit4
+                        {...this.props.digitVals}
+                        readOnly={this.props.valsRO}
+                        onDigitCh={this.onDigitChange}
+                    />
+                </DivTc>
+                <DivTc>
+                    <Digit
+                        value={this.props.rg}
+                        readOnly={this.props.rateRO}
+                        onCh={this.onDigitChange}
+                        dn={'Digit-g'}
+                    />
+                </DivTc>
+                <DivTc>
+                    <Digit
+                        value={this.props.rr}
+                        readOnly={this.props.rateRO}
+                        onCh={this.onDigitChange}
+                        dn={'Digit-r'}
+                    />
+                </DivTc>
+                <DivTc>
+                    <SubBtn type="submit" visib={this.props.showRate}>
+                        Rate
+                    </SubBtn>
+                </DivTc>
+            </div>
+        );
+    }
+}
 
 Atry.propTypes = {
     digitVals: PropTypes.arrayOf(PropTypes.number),
