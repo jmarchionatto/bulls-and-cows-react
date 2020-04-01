@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Atry from './Atry';
+import Atry from '../Atry';
 import styled from 'styled-components';
 
 const RowDiv = styled.div`
