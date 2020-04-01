@@ -33,8 +33,10 @@ function matchesRating(nArr, rating) {
  */
 function getNextNonRepeated(n) {
     let num = asNumber(n) + 1;
+    num++;
     while (num <= 9876 && hasDigitsRepeated(num)) {
-        num = asNumber(n) + 1;
+        num = asNumber(num);
+        num++;
     }
     if (num >= 9876) return null;
 
