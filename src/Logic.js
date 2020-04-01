@@ -11,14 +11,18 @@ import * as UTIL from './Util';
 
 // ratings schema
 // const ratings = [{
-//     numArr: [],
+//     numArr: Number[123-9876] (no repeated digits)
 //     rg: Number[0-4],
 //     rg: Number[0-4]
 // }];
 
 export class Logic {
+    // maximum 4 unique-digit number
+    static MAX = 9876;
+
     constructor() {
         this.ratings = [];
+        this.candidates = null;
         this.candidateIt = this.candidateIt.bind(this);
     }
 
@@ -27,14 +31,19 @@ export class Logic {
      */
     getCandidate = () => {
         if (!this.candidates) {
-            this.candidates = [];
-            for (const cand of this.candidateIt()) {
-                this.candidates.push(cand);
-            }
+            this.candidates = this.buildCandidates();
         }
         let cQty = this.candidates.length;
         let cIdx = Logic.getRandomInt(0, cQty);
         return this.candidates[cIdx];
+    };
+
+    buildCandidates = () => {
+        let candidates = [];
+        for (const cand of this.candidateIt()) {
+            candidates.push(cand);
+        }
+        return candidates;
     };
 
     /**
@@ -55,29 +64,24 @@ export class Logic {
     };
 
     /**
-     * Yields all possible 4 non-repeated one-digit numbers representing a candidate,
-     * which means that match all the ratings received so far
+     * Yields all possible 4 unique-digits numbers representing a candidate,
+     * which means that match all the current ratings
      */
     *candidateIt() {
-        const last = 98;
+        const last = 9876;
 
-        let nArr = [0, 1];
-        yield nArr;
+        let n = 123;
+        yield n;
 
-        let logic = this;
+        while (n <= last) {
+            n = UTIL.getNextUniqueDigits(n);
+            if (isNaN(n)) return;
 
-        while (UTIL.asNumber(nArr) <= last) {
-            nArr = UTIL.getNextNonRepeated(nArr);
-            if (nArr === null) {
-                return;
+            while (!UTIL.matchesRatings(n, this.ratings)) {
+                n = UTIL.getNextUniqueDigits(n);
+                if (isNaN(n)) return;
             }
-            while (!UTIL.matchesRatings(nArr, logic.ratings)) {
-                nArr = UTIL.getNextNonRepeated(nArr);
-                if (nArr === null) {
-                    return;
-                }
-            }
-            yield nArr;
+            yield n;
         }
     }
 }

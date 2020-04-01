@@ -5,19 +5,23 @@ import Logic from '../Logic';
 describe('Logic', () => {
     let logic;
 
-    beforeEach(() => {
+    beforeAll(() => {
         logic = new Logic();
     });
 
-    it('hasDigitsRepeated() works', () => {
+    it('getCandidate() (and class constructor) works', () => {
         let res = logic.getCandidate();
-        console.log('res', res);
-        // expect(res).to.be.equal(123);
+        // console.log('res', res);
+        expect(res >= 123 && res <= 9876).toBe(true);
     });
 
-    // it('getCandidateNumber() works', () => {
-    //     console.log('logic instance', logic);
-    //     let n = logic.getCandidate();
-    //     console.log('n', n);
-    // });
+    it('getAllCandidates() works', () => {
+        let cands = logic.getAllCandidates();
+        // let i = 0;
+        // while (i < 5100) {
+        //     console.log(`cands [${i}-${i + 99}]`, cands.slice(i, i + 99));
+        //     i += 100;
+        // }
+        expect(cands.length).toBe(10 * 9 * 8 * 7);
+    });
 });

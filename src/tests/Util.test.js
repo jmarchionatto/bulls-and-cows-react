@@ -31,15 +31,15 @@ describe('Util', () => {
         });
     });
 
-    describe('getNextNonRepeated', () => {
+    describe('getNextUniqueDigits', () => {
         it('still available < 9876', () => {
-            let res = UTIL.getNextNonRepeated([5, 7, 8, 9]);
-            expect(res).toStrictEqual([5, 7, 9, 0]);
+            let res = UTIL.getNextUniqueDigits(5789);
+            expect(res).toStrictEqual(5790);
         });
 
         it('no available < 9876', () => {
-            let res = UTIL.getNextNonRepeated([9, 8, 7, 6]);
-            expect(res).toBe(null);
+            let res = UTIL.getNextUniqueDigits(9876);
+            expect(res).toBe(NaN);
         });
     });
 
@@ -47,24 +47,24 @@ describe('Util', () => {
         // number could be: 3715
         const ratings = [
             {
-                numArr: [2, 7, 5, 1],
+                numArr: 2751,
                 rg: 1,
                 rr: 2,
             },
             {
-                numArr: [6, 7, 1, 8],
+                numArr: 6718,
                 rg: 2,
                 rr: 0,
             },
         ];
 
         it('still available < 9876', () => {
-            let res = UTIL.matchesRatings([3, 7, 1, 5], ratings);
+            let res = UTIL.matchesRatings(3715, ratings);
             expect(res).toBe(true);
         });
 
         it('no available < 9876', () => {
-            let res = UTIL.matchesRatings([9, 8, 7, 6], ratings);
+            let res = UTIL.matchesRatings(9876, ratings);
             expect(res).toBe(false);
         });
     });
