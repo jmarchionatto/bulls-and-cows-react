@@ -22,6 +22,7 @@ class App extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = this.state || appState;
+        this.logic = new Logic();
     }
 
     setUserTryFirst = userTryFirst => {
@@ -46,7 +47,7 @@ class App extends React.PureComponent {
     };
 
     getCompTry = () => {
-        return Logic.getCompTry(this.state);
+        return this.logic.getCandidate(this.state);
     };
 
     addCompTry = aTry => {
