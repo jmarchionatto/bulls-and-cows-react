@@ -8,6 +8,8 @@ const emptyUserTry = {
     digitVals: ['', '', '', ''],
     rg: '',
     rr: '',
+    showRateFlds: false,
+    showRateBtn: false,
 };
 
 class App extends React.PureComponent {
@@ -105,13 +107,13 @@ class App extends React.PureComponent {
             newTryState.rg = rate;
             // also make rate btn visible ?
             if (currentTry.rr) {
-                newTryState.showRate = true;
+                newTryState.showRateBtn = true;
             }
         } else {
             newTryState.rr = rate;
             // also make rate btn visible ?
             if (currentTry.rg) {
-                newTryState.showRate = true;
+                newTryState.showRateBtn = true;
             }
         }
         return newTryState;
@@ -124,7 +126,7 @@ class App extends React.PureComponent {
             newDigitVals[kIdx] = '';
             newTryState = { ...currentTry, digitVals: newDigitVals, showSendTry: false };
         } else {
-            newTryState = { ...currentTry, [`r${kIdx}`]: '', showRate: false };
+            newTryState = { ...currentTry, [`r${kIdx}`]: '', showRateBtn: false };
         }
         return newTryState;
     }
@@ -137,15 +139,12 @@ class App extends React.PureComponent {
     };
 
     setCurrentTry = newTry => {
-        console.log('App -> newTry', newTry);
-        console.log('App -> this.state', this.state);
         if (this.state.userTries.length > this.state.compTries.length) {
             let tryIdx = this.state.userTries.length - 1;
             let newTries = [...this.state.userTries];
             newTries[tryIdx] = newTry;
 
             let newState = { ...this.state, userTries: newTries };
-            console.log('App -> newStateeeeeeeeeeee', newState);
             this.setState(newState, () => {
                 console.log('App -> state after set', this.state);
             });

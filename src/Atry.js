@@ -12,12 +12,15 @@ const DivTc = styled.div`
 `;
 
 const SubBtn = styled.button`
-    /* display: ${props => props.showSendTry || 'none'}; */
     visibility: ${props => props.visib || 'hidden'};
     width: 4em;
     height: 3em;
     text-align: center;
     border-radius: 10px;
+`;
+
+const RateDiv = styled.div`
+    visibility: ${props => props.visib || 'hidden'};
 `;
 
 class Atry extends React.PureComponent {
@@ -41,27 +44,29 @@ class Atry extends React.PureComponent {
                         onDigitCh={this.props.handlers.onChangeKey}
                     />
                 </DivTc>
-                <DivTc>
-                    <Digit
-                        value={this.props.try.rg}
-                        readOnly={this.props.try.ratesRO}
-                        onCh={this.props.handlers.onChangeKey}
-                        dn={FLD_NAMES['rg']}
-                    />
-                </DivTc>
-                <DivTc>
-                    <Digit
-                        value={this.props.try.rr}
-                        readOnly={this.props.try.ratesRO}
-                        onCh={this.props.handlers.onChangeKey}
-                        dn={FLD_NAMES['rr']}
-                    />
-                </DivTc>
-                <DivTc>
-                    <SubBtn type="submit" visib={this.props.try.showRate}>
-                        Rate
-                    </SubBtn>
-                </DivTc>
+                <RateDiv visib={this.props.try.showRateFlds}>
+                    <DivTc>
+                        <Digit
+                            value={this.props.try.rg}
+                            readOnly={this.props.try.ratesRO}
+                            onCh={this.props.handlers.onChangeKey}
+                            dn={FLD_NAMES['rg']}
+                        />
+                    </DivTc>
+                    <DivTc>
+                        <Digit
+                            value={this.props.try.rr}
+                            readOnly={this.props.try.ratesRO}
+                            onCh={this.props.handlers.onChangeKey}
+                            dn={FLD_NAMES['rr']}
+                        />
+                    </DivTc>
+                    <DivTc>
+                        <SubBtn type="submit" visib={this.props.try.showRateBtn}>
+                            Rate
+                        </SubBtn>
+                    </DivTc>
+                </RateDiv>
             </div>
         );
     }
