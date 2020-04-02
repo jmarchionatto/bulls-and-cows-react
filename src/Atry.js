@@ -33,7 +33,11 @@ const SubBtn = styled.button`
 class Atry extends React.PureComponent {
     constructor(props) {
         super();
-        this.state = props.try;
+        this.state = {
+            ...props.try,
+            showSendTry: false,
+            showRate: false,
+        };
     }
 
     onDigitChange = (e, cn) => {

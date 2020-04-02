@@ -14,8 +14,6 @@ const emptyUserTry = {
     digitVals: ['', '', '', ''],
     rg: '',
     rr: '',
-    showSendTry: false,
-    valsRO: false,
 };
 
 class App extends React.PureComponent {
@@ -44,18 +42,16 @@ class App extends React.PureComponent {
 
     addCompTry = aTry => {
         const newState = {
-            userTryFirst: this.state.userTryFirst,
-            userTries: [...this.state.userRows],
-            compTries: [...this.state.userTries, { aTry }],
+            ...this.state,
+            compTries: [...this.state.compTries, { aTry }],
         };
         this.setState({ newState });
     };
 
     addUserTry = aTry => {
         const newState = {
-            userTryFirst: this.state.userTryFirst,
-            userTries: [...this.state.userRows, { aTry }],
-            compTries: [...this.state.userTries],
+            ...this.state,
+            userTries: [...this.state.userTries, { aTry }],
         };
         this.setState({ newState });
     };
