@@ -14,31 +14,42 @@ const InputTxt = styled.input`
     border-left: ${props => (props.first ? '4px' : '0px')} solid #1c6ea4;
 
     font-family: Verdana;
-    /* font-size: 3em; */
+    font-size: 1em;
     color: #27b11e;
     font-weight: bold;
 `;
 
-const Digit = ({ value, readOnly, onCh, first }) => (
-    <InputTxt
-        type="text"
-        length="1"
-        value={value}
-        first={first}
-        readonly={readOnly}
-        onChange={e => onCh(e)}
-    />
-);
+class Digit extends React.PureComponent {
+    constructor(props) {
+        super();
+        this.state = { ...props };
+    }
+
+    handleChange = e => {
+        this.state.onCh(e, this.state.dn);
+        this.setState({ ...this.setState, value: e.target.value });
+    };
+
+    render() {
+        return (
+            <InputTxt
+                type="text"
+                length="1"
+                value={this.state.value}
+                first={this.state.first}
+                readonly={this.state.readOnly}
+                onChange={this.handleChange}
+            />
+        );
+    }
+}
 
 Digit.propTypes = {
     value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     readOnly: PropTypes.bool,
     onCh: PropTypes.func.isRequired,
     first: PropTypes.bool,
-};
-
-Digit.defaultProps = {
-    value: '',
+    dn: PropTypes.string,
 };
 
 export default Digit;

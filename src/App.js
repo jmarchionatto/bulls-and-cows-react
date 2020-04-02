@@ -3,7 +3,7 @@ import AskWhoFirst from './AskWhoFirst';
 import TriesPanel from './TriesPanel';
 import Logic from './Logic';
 
-const appState = {
+const initialState = {
     // true if user tries first
     userTryFirst: null,
     userTries: [],
@@ -11,9 +11,9 @@ const appState = {
 };
 
 const emptyUserTry = {
-    digitVals: [null, null, null, null],
-    rg: null,
-    rr: null,
+    digitVals: ['', '', '', ''],
+    rg: '',
+    rr: '',
     showSendTry: false,
     valsRO: false,
 };
@@ -21,29 +21,21 @@ const emptyUserTry = {
 class App extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = this.state || appState;
+        this.state = this.state || initialState;
         this.logic = new Logic();
     }
 
     setUserTryFirst = userTryFirst => {
-        let newState = {
-            userTryFirst: userTryFirst,
-        };
-        // add corresponding empty try
-        if (userTryFirst) {
-            newState = {
-                ...newState,
-                userTries: [emptyUserTry],
-            };
-        } else {
-            newState = {
-                ...newState,
-                compTries: [this.getCompTry()],
-            };
-        }
-        this.setState(newState, () => {
-            console.log('App -> new state: ', this.state);
-        });
+        this.setState(
+            {
+                ...this.state,
+                userTryFirst: userTryFirst,
+                userTries: userTryFirst ? [emptyUserTry] : [this.getCompTry()],
+            },
+            () => {
+                console.log('App -> new state: ', this.state);
+            }
+        );
     };
 
     getCompTry = () => {
@@ -73,13 +65,7 @@ class App extends React.PureComponent {
             console.log('rendering AskWhoFirst');
             return <AskWhoFirst onSetWhoFirst={this.setUserTryFirst} />;
         }
-        return (
-            <TriesPanel
-                userFirst={this.state.userTryFirst}
-                userTries={this.state.userTries}
-                compTries={this.state.compTries}
-            />
-        );
+        return <TriesPanel {...this.state} />;
     }
 }
 

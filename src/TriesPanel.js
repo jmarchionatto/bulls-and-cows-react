@@ -15,8 +15,13 @@ const DivTc = styled.div`
 `;
 
 class TriesPanel extends React.PureComponent {
+    constructor(props) {
+        super();
+        console.log('TriesPanel -> constructor -> props', props);
+    }
+
     render() {
-        if (this.props.userFirst) {
+        if (this.props.userTryFirst) {
             return (
                 <DivT>
                     <DivTc>
@@ -43,7 +48,7 @@ class TriesPanel extends React.PureComponent {
 }
 
 TriesPanel.propTypes = {
-    userFirst: PropTypes.bool.isRequired,
+    userTryFirst: PropTypes.bool.isRequired,
     userTries: PropTypes.array.isRequired,
     compTries: PropTypes.array.isRequired,
 };
