@@ -15,12 +15,13 @@ const DivSt = styled.div`
 
 const UserTriesColumn = props => (
     <DivSt>
-        <TriesColumn title={'Your Tries'} tries={props.tries} />
+        <TriesColumn title={'Your Tries'} tries={props.tries} handlers={props.handlers} />
     </DivSt>
 );
 
 UserTriesColumn.propTypes = {
     tries: PropTypes.array.isRequired,
+    handlers: PropTypes.object,
 };
 
 export default UserTriesColumn;

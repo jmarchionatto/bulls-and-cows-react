@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Digit from './Digit';
-import { dgNames } from './Atry';
+import { FLD_NAMES } from './Const';
 // import styled from 'styled-components';
 
 const Digit4 = ({ digitVals, readOnly, onDigitCh }) => (
     <div>
-        <Digit value={digitVals[0]} readonly={readOnly} onCh={onDigitCh} dn={dgNames['d0']} first />
-        <Digit value={digitVals[1]} readonly={readOnly} onCh={onDigitCh} dn={dgNames['d1']} />
-        <Digit value={digitVals[2]} readonly={readOnly} onCh={onDigitCh} dn={dgNames['d2']} />
-        <Digit value={digitVals[3]} readonly={readOnly} onCh={onDigitCh} dn={dgNames['d3']} />
+        <Digit
+            value={digitVals[0]}
+            readonly={readOnly}
+            onCh={onDigitCh}
+            dn={FLD_NAMES['d0']}
+            first
+        />
+        <Digit value={digitVals[1]} readonly={readOnly} onCh={onDigitCh} dn={FLD_NAMES['d1']} />
+        <Digit value={digitVals[2]} readonly={readOnly} onCh={onDigitCh} dn={FLD_NAMES['d2']} />
+        <Digit value={digitVals[3]} readonly={readOnly} onCh={onDigitCh} dn={FLD_NAMES['d3']} />
     </div>
 );
 

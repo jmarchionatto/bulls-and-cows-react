@@ -8,12 +8,12 @@ const InputTxt = styled.input`
     width: 2em;
     text-align: center;
 
-    border-top: 4px solid #1c6ea4;
+    /* border-top: 4px solid #1c6ea4; */
     border-right: 4px solid #1c6ea4;
     border-bottom: 4px solid #1c6ea4;
     border-left: ${props => (props.first ? '4px' : '0px')} solid #1c6ea4;
 
-    font-family: Verdana;
+    /* font-family: Verdana; */
     font-size: 1em;
     color: #27b11e;
     font-weight: bold;
@@ -22,11 +22,12 @@ const InputTxt = styled.input`
 class Digit extends React.PureComponent {
     constructor(props) {
         super();
-        this.state = { ...props };
+        // this.props = { ...props };
+        // console.log('Digit -> constructor -> props', props);
     }
 
     handleChange = e => {
-        this.state.onCh(e, this.state.dn);
+        this.props.onCh(e, this.props.dn);
         this.setState({ ...this.setState, value: e.target.value });
     };
 
@@ -35,9 +36,9 @@ class Digit extends React.PureComponent {
             <InputTxt
                 type="text"
                 length="1"
-                value={this.state.value}
-                first={this.state.first}
-                readonly={this.state.readOnly}
+                value={this.props.value}
+                first={this.props.first}
+                readonly={this.props.readOnly}
                 onChange={this.handleChange}
             />
         );

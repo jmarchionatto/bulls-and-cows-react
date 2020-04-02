@@ -25,10 +25,17 @@ class TriesPanel extends React.PureComponent {
             return (
                 <DivT>
                     <DivTc>
-                        <UserTriesColumn tries={this.props.userTries} />,
+                        <UserTriesColumn
+                            tries={this.props.userTries}
+                            handlers={this.props.handlers}
+                        />
+                        ,
                     </DivTc>
                     <DivTc>
-                        <CompTriesColumn tries={this.props.compTries} />
+                        <CompTriesColumn
+                            tries={this.props.compTries}
+                            handlers={this.props.handlers}
+                        />
                     </DivTc>
                 </DivT>
             );
@@ -36,10 +43,17 @@ class TriesPanel extends React.PureComponent {
             return (
                 <DivT>
                     <DivTc>
-                        <CompTriesColumn tries={this.props.compTries} />
+                        <CompTriesColumn
+                            tries={this.props.compTries}
+                            handlers={this.props.handlers}
+                        />
                     </DivTc>
                     <DivTc>
-                        <UserTriesColumn tries={this.props.userTries} />,
+                        <UserTriesColumn
+                            tries={this.props.userTries}
+                            handlers={this.props.handlers}
+                        />
+                        ,
                     </DivTc>
                 </DivT>
             );
@@ -51,6 +65,7 @@ TriesPanel.propTypes = {
     userTryFirst: PropTypes.bool.isRequired,
     userTries: PropTypes.array.isRequired,
     compTries: PropTypes.array.isRequired,
+    handlers: PropTypes.object,
 };
 
 export default TriesPanel;

@@ -16,7 +16,7 @@ class TriesColumn extends React.PureComponent {
     render() {
         let tryElements = [];
         this.props.tries.map((aTry, i) => {
-            tryElements.push(<Atry key={i} try={aTry} />);
+            tryElements.push(<Atry key={i} try={aTry} handlers={this.props.handlers} />);
         });
         return (
             <ColDiv>
@@ -30,6 +30,7 @@ class TriesColumn extends React.PureComponent {
 TriesColumn.propTypes = {
     title: PropTypes.string.isRequired,
     tries: PropTypes.array.isRequired,
+    handlers: PropTypes.object,
 };
 
 export default TriesColumn;
