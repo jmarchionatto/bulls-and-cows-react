@@ -26,6 +26,10 @@ export class Logic {
         this.candidateIt = this.candidateIt.bind(this);
     }
 
+    rateTry = (num, tryArr) => {
+        return UTIL.rate(UTIL.asNArray(num), tryArr);
+    };
+
     /**
      * Extract a random number from the candidates
      */

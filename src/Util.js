@@ -8,7 +8,7 @@
 
 import Logic from './Logic';
 
-function matchesRatings(n, ratings) {
+export function matchesRatings(n, ratings) {
     for (const r of ratings) {
         if (!matchesRating(n, r)) {
             return false;
@@ -32,11 +32,30 @@ function matchesRating(n, rating) {
     return good === rating.rg && reg === rating.rr;
 }
 
+export function rate(nArr, tryArr) {
+    let good = 0,
+        reg = 0;
+    for (const [nIdx, nDig] of nArr.entries()) {
+        for (const [rIdx, rDig] of tryArr.entries()) {
+            // console.log('-----------------------');
+            // console.log('rate -> nIdx, nDig', nIdx, nDig);
+            // console.log('rate -> rIdx, rDig', rIdx, rDig);
+            if (nDig == rDig) {
+                // console.log('rate -> nDig === rDig', nDig === rDig);
+                nIdx === rIdx ? good++ : reg++;
+            }
+        }
+        // console.log('rate -> good, reg', good, reg);
+        // console.log('-----------------------');
+    }
+    return { good, reg };
+}
+
 /**
  * Returns the first unique-digits number greater than the
  * First quick implementation not very efficiant
  */
-function getNextUniqueDigits(n) {
+export function getNextUniqueDigits(n) {
     let num = n + 1;
     while (hasDigitsRepeated(num)) {
         if (num > Logic.MAX) return NaN;
@@ -64,13 +83,11 @@ function hasDigitsRepeated(n) {
     return false;
 }
 
-function asNArray(n) {
+export function asNArray(n) {
     let strDigits = ('' + n).split('');
     return strDigits.map(Number);
 }
 
-function asNumber(nArr) {
+export function asNumber(nArr) {
     return Number(nArr.join(''));
 }
-
-export { matchesRatings, matchesRating, getNextUniqueDigits, hasDigitsRepeated, asNumber };

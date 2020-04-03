@@ -2,15 +2,8 @@ import React from 'react';
 import AskWhoFirst from './AskWhoFirst';
 import TriesPanel from './TriesPanel';
 import Logic from './Logic';
+import * as SU from './StateUtil';
 import { FLD_NAMES } from './Const';
-
-const emptyUserTry = {
-    digitVals: ['', '', '', ''],
-    rg: '',
-    rr: '',
-    showRateFlds: false,
-    showRateBtn: false,
-};
 
 class App extends React.PureComponent {
     constructor(props) {
@@ -22,156 +15,143 @@ class App extends React.PureComponent {
             compTries: [],
             handlers: {
                 onChangeKey: this.changeKey,
+                onSendTry: this.sendTry,
             },
         };
-        this.logic = process.nextTick(() => new Logic());
+        process.nextTick(() => {
+            // because takes some processing
+            this.logic = new Logic();
+        });
     }
 
+    //////////////////////////////////////////////////////////////////////////////
+    // Handlers sent down to components
+    //////////////////////////////////////////////////////////////////////////////
+
     setUserTryFirst = userTryFirst => {
-        this.setState(
-            {
-                ...this.state,
-                userTryFirst: userTryFirst,
-                userTries: userTryFirst ? [emptyUserTry] : [this.getCompTry()],
-            },
-            () => {
-                console.log('App -> new state: ', this.state);
-            }
-        );
-    };
-
-    getCompTry = () => {
-        return this.logic.getCandidate(this.state);
-    };
-
-    addCompTry = aTry => {
-        const newState = {
+        let newState = {
             ...this.state,
-            compTries: [...this.state.compTries, { aTry }],
+            compNumber: this.logic.getCandidate(), // 'think' comp number
+            userTryFirst: userTryFirst,
+            userTries: userTryFirst ? [SU.emptyUserTry] : [],
         };
-        this.setState({ newState });
+        if (userTryFirst) {
+            let compTryDigits = this.logic.getCandidate(this.state);
+            SU.addCompTry(newState, compTryDigits);
+        }
+        this.setState(newState, () => {
+            console.log('App -> setUserTryFirst -> new state: ', this.state);
+        });
     };
 
-    addUserTry = aTry => {
-        const newState = {
-            ...this.state,
-            userTries: [...this.state.userTries, { aTry }],
+    sendTry = () => {
+        let newState = { ...this.state };
+        // rate try sent and send rate back
+        let currentUserTry = SU.getCurrentUserTry(this.state);
+        // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
+        // console.log('App -> sendTry -> this.state.compNumber', this.state.compNumber);
+        let rate = this.logic.rateTry(this.state.compNumber, currentUserTry.digitVals);
+        let newUserTry = {
+            ...currentUserTry,
+            rg: rate.good,
+            rr: rate.reg,
+            showRateFlds: true,
         };
-        this.setState({ newState });
-    };
+        newState = SU.replLastUserTry(newState, newUserTry);
 
-    getFldKey = value => Object.keys(FLD_NAMES).find(key => FLD_NAMES[key] === value);
+        // send comp try?
+        if (!this.state.compDone) {
+            let compTryDigits = this.logic.getCandidate(this.state);
+            newState = SU.addCompTry(newState, compTryDigits);
+        }
+
+        this.setState(newState);
+    };
 
     changeKey = (event, fldId) => {
         let [kType, kIdx] = this.getFldKey(fldId);
 
-        let currentTry = this.getCurrentTry();
-        let newTryState;
+        let currentUserTry = SU.getCurrentUserTry(this.state);
+        let newUserTry;
 
         if (event.target.value) {
             if (kType === 'd') {
-                newTryState = this.handleDigitAdded(currentTry, kType, kIdx, event.target.value);
+                newUserTry = this.handleDigitAdded(currentUserTry, kType, kIdx, event.target.value);
             } else {
-                newTryState = this.handleRateAdded(currentTry, kType, kIdx, event.target.value);
+                newUserTry = this.handleRateAdded(currentUserTry, kType, kIdx, event.target.value);
             }
         } else {
             // value removed from field
-            newTryState = this.handleFieldRemoved(currentTry, kType, kIdx);
+            newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
         }
-        this.setCurrentTry(newTryState);
+        let newState = SU.replLastUserTry(this.state, newUserTry);
+        this.setState(newState, () => {
+            console.log('App -> changeKey -> newState set: ', newState);
+            console.log('App -> changeKey -> this.state: ', this.state);
+        });
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //  Event handler helpers
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    handleDigitAdded(currentTry, kType, kIdx, digit) {
-        let newDigitVals = [...currentTry.digitVals];
+    getFldKey = value => Object.keys(FLD_NAMES).find(key => FLD_NAMES[key] === value);
+
+    handleDigitAdded(currentUserTry, kType, kIdx, digit) {
+        let newDigitVals = [...currentUserTry.digitVals];
         newDigitVals[kIdx] = digit;
 
         let newTryState = {
-            ...currentTry,
+            ...currentUserTry,
             digitVals: newDigitVals,
         };
 
         // must make submit btn visible?
-        if (this.restDigitsSet(currentTry, kIdx)) {
+        if (this.restDigitsSet(currentUserTry, kIdx)) {
             newTryState.showSendTry = true;
         }
         return newTryState;
     }
 
-    handleRateAdded(currentTry, kType, kIdx, rate) {
-        let newTryState = { ...currentTry };
+    handleRateAdded(currentUserTry, kType, kIdx, rate) {
+        let newTryState = { ...currentUserTry };
         if (kIdx === 'g') {
             newTryState.rg = rate;
             // also make rate btn visible ?
-            if (currentTry.rr) {
+            if (currentUserTry.rr) {
                 newTryState.showRateBtn = true;
             }
         } else {
             newTryState.rr = rate;
             // also make rate btn visible ?
-            if (currentTry.rg) {
+            if (currentUserTry.rg) {
                 newTryState.showRateBtn = true;
             }
         }
         return newTryState;
     }
 
-    handleFieldRemoved(currentTry, kType, kIdx) {
+    handleFieldRemoved(currentUserTry, kType, kIdx) {
         let newTryState;
         if (kType === 'd') {
-            let newDigitVals = currentTry.digitVals;
+            let newDigitVals = currentUserTry.digitVals;
             newDigitVals[kIdx] = '';
-            newTryState = { ...currentTry, digitVals: newDigitVals, showSendTry: false };
+            newTryState = { ...currentUserTry, digitVals: newDigitVals, showSendTry: false };
         } else {
-            newTryState = { ...currentTry, [`r${kIdx}`]: '', showRateBtn: false };
+            newTryState = { ...currentUserTry, [`r${kIdx}`]: '', showRateBtn: false };
         }
         return newTryState;
     }
 
-    getCurrentTry = () => {
-        if (this.state.userTries.length > this.state.compTries.length) {
-            return this.state.userTries.slice(-1)[0];
-        }
-        throw 'Must implement this case';
-    };
-
-    setCurrentTry = newTry => {
-        if (this.state.userTries.length > this.state.compTries.length) {
-            let tryIdx = this.state.userTries.length - 1;
-            let newTries = [...this.state.userTries];
-            newTries[tryIdx] = newTry;
-
-            let newState = { ...this.state, userTries: newTries };
-            this.setState(newState, () => {
-                console.log('App -> state after set', this.state);
-            });
-            return;
-        }
-
-        throw 'Must implement this case';
-    };
-
-    restDigitsSet = (currentTry, kIdx) => {
-        // console.log('------------------------------------------------------------ ');
-        // console.log('allOtherValsSet -> this.state.digitVals: ', this.state.digitVals);
-        for (const [valIdx, val] of currentTry.digitVals.entries()) {
-            // console.log('-----------------------------');
-            // console.log('allOtherValsSet -> valIdx ', valIdx);
-            // console.log('allOtherValsSet -> kIdx ', kIdx);
-            // console.log('allOtherValsSet -> val ', val);
-            // console.log('-----------------------------');
-            // console.log('allOtherValsSet -> valIdx !== kIdx', valIdx !== kIdx);
+    restDigitsSet = (aTry, kIdx) => {
+        for (const [valIdx, val] of aTry.digitVals.entries()) {
             // testing non strictly on purpose!
             if (valIdx != kIdx && !val) {
-                console.log('allOtherValsSet -> returning false');
+                // console.log('allOtherValsSet -> returning false');
                 return false;
             }
         }
-        console.log('allOtherValsSet -> returning true');
-        // console.log('------------------------------------------------------------ ');
+        // console.log('allOtherValsSet -> returning true');
         return true;
     };
 
@@ -184,6 +164,7 @@ class App extends React.PureComponent {
             console.log('rendering AskWhoFirst');
             return <AskWhoFirst onSetWhoFirst={this.setUserTryFirst} />;
         }
+        console.log('App -> render -> this.state', this.state);
         return <TriesPanel {...this.state} />;
     }
 }
