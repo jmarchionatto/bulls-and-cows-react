@@ -5,6 +5,10 @@ import Digit4 from './Digit4';
 import { FLD_NAMES } from './Const';
 import styled from 'styled-components';
 
+const DivT = styled.div`
+    display: table;
+`;
+
 const DivTc = styled.div`
     display: table-cell;
     padding: 8px;
@@ -29,11 +33,16 @@ class Atry extends React.PureComponent {
         console.log('Atry -> constructor -> props', props);
     }
 
+    sendTry = e => {
+        console.log('Atry -> e', e);
+        this.props.handlers.onSendTry(e);
+    };
+
     render() {
         return (
-            <div>
+            <DivT>
                 <DivTc>
-                    <SubBtn type="submit" visib={this.props.try.showSendTry}>
+                    <SubBtn type="submit" visib={this.props.try.showSendTry} onClick={this.sendTry}>
                         Send Try
                     </SubBtn>
                 </DivTc>
@@ -67,7 +76,7 @@ class Atry extends React.PureComponent {
                         </SubBtn>
                     </DivTc>
                 </RateDiv>
-            </div>
+            </DivT>
         );
     }
 }
