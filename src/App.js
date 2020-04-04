@@ -34,68 +34,69 @@ export class App extends React.PureComponent {
     //////////////////////////////////////////////////////////////////////////////
 
     setUserTryFirst = userTryFirst => {
-        let newState = {
-            ...this.state,
-            compNumber: this.logic.getCandidate(), // 'think' comp number
-            userTryFirst: userTryFirst,
-            userTries: userTryFirst ? [SU.emptyUserTry] : [],
-        };
-        if (userTryFirst) {
-            let compTryDigits = this.logic.getCandidate(this.state);
-            SU.addCompTry(newState, compTryDigits);
-        }
-        this.setState(newState, () => {
-            console.log('App -> setUserTryFirst -> new state: ', this.state);
+        this.setState(oldState => {
+            let newState = {
+                ...oldState,
+                compNumber: this.logic.getCandidate(), // 'think' comp number
+                userTryFirst: userTryFirst,
+                userTries: userTryFirst ? [SU.emptyUserTry] : [],
+            };
+            if (userTryFirst) {
+                let compTryDigits = this.logic.getCandidate(oldState);
+                SU.addCompTry(newState, compTryDigits);
+            }
+            return newState;
         });
     };
 
     sendTry = () => {
-        let newState = { ...this.state };
-        // rate try sent and send rate back
-        let currentUserTry = SU.getCurrentUserTry(this.state);
-        // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
-        // console.log('App -> sendTry -> this.state.compNumber', this.state.compNumber);
-        let rate = this.logic.rateTry(this.state.compNumber, currentUserTry.digitVals);
-        let newUserTry = {
-            ...currentUserTry,
-            rg: rate.good,
-            rr: rate.reg,
-            showRateFlds: true,
-        };
-        newState = SU.replLastUserTry(newState, newUserTry);
+        this.setState(oldState => {
+            let newState = { ...oldState };
+            // rate try sent and send rate back
+            let currentUserTry = SU.getCurrentUserTry(oldState);
+            // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
+            // console.log('App -> sendTry -> this.state.compNumber', this.state.compNumber);
+            let rate = this.logic.rateTry(newState.compNumber, currentUserTry.digitVals);
+            let newUserTry = {
+                ...currentUserTry,
+                rg: rate.good,
+                rr: rate.reg,
+                showRateFlds: true,
+            };
+            newState = SU.replLastUserTry(newState, newUserTry);
 
-        // send comp try?
-        if (!this.state.compDone) {
-            let compTryDigits = this.logic.getCandidate(this.state);
-            newState = SU.addCompTry(newState, compTryDigits);
-        }
+            // send comp try?
+            if (!newState.compDone) {
+                let compTryDigits = this.logic.getCandidate(oldState);
+                newState = SU.addCompTry(newState, compTryDigits);
+            }
 
-        this.setState(newState);
+            return newState;
+        });
     };
 
     changeKey = (event, fldId) => {
-        console.log('App -> changeKey -> this.state entering: ', this.state);
-        let [kType, kIdx] = this.getFldKey(fldId);
+        let eventValue = event.target.value;
+        this.setState(oldState => {
+            console.log('App -> changeKey -> state entering: ', oldState);
+            let [kType, kIdx] = this.getFldKey(fldId);
 
-        let currentUserTry = SU.getCurrentUserTry(this.state);
-        let newUserTry;
+            let currentUserTry = SU.getCurrentUserTry(oldState);
+            let newUserTry;
 
-        if (event.target.value) {
-            if (kType === 'd') {
-                newUserTry = this.handleDigitAdded(currentUserTry, kType, kIdx, event.target.value);
+            if (eventValue) {
+                if (kType === 'd') {
+                    newUserTry = this.handleDigitAdded(currentUserTry, kType, kIdx, eventValue);
+                } else {
+                    newUserTry = this.handleRateAdded(currentUserTry, kType, kIdx, eventValue);
+                }
             } else {
-                newUserTry = this.handleRateAdded(currentUserTry, kType, kIdx, event.target.value);
+                // value removed from field
+                newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
             }
-        } else {
-            // value removed from field
-            newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
-        }
-        let newState = SU.replLastUserTry(this.state, newUserTry);
+            let newState = SU.replLastUserTry(oldState, newUserTry);
 
-        console.log('App -> changeKey -> this.state before setState: ', this.state);
-        console.log('App -> changeKey -> newState before setState: ', newState);
-        this.setState(newState, () => {
-            console.log('App -> changeKey -> this.state: ', this.state);
+            return newState;
         });
     };
 
