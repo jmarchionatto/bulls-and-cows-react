@@ -50,7 +50,7 @@ class Atry extends React.PureComponent {
                     <Digit4
                         digitVals={this.props.try.digitVals}
                         readOnly={this.props.try.valsRO}
-                        onDigitCh={this.props.handlers}
+                        onDigitCh={this.props.handlers.onChangeNumberKey}
                     />
                 </DivTc>
                 <RateDiv visib={this.props.try.showRateFlds}>
@@ -58,7 +58,7 @@ class Atry extends React.PureComponent {
                         <Digit
                             value={this.props.try.rg}
                             readOnly={this.props.try.ratesRO}
-                            onCh={this.props.handlers.onChangeKey}
+                            onCh={this.props.handlers.onChangeRateKey}
                             dn={FLD_NAMES['rg']}
                         />
                     </DivTc>
@@ -66,7 +66,7 @@ class Atry extends React.PureComponent {
                         <Digit
                             value={this.props.try.rr}
                             readOnly={this.props.try.ratesRO}
-                            onCh={this.props.handlers.onChangeKey}
+                            onCh={this.props.handlers.onChangeRateKey}
                             dn={FLD_NAMES['rr']}
                         />
                     </DivTc>
@@ -90,7 +90,7 @@ Atry.propTypes = {
     showRate: PropTypes.bool,
     valsRO: PropTypes.bool,
     ratesRO: PropTypes.bool,
-    handlers: PropTypes.object,
+    handlers: PropTypes.object.isRequired,
 };
 
 Atry.ddefaultProps = {

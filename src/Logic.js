@@ -31,7 +31,7 @@ export class Logic {
     };
 
     /**
-     * Extract a random number from the candidates
+     * Returns array version of random number from the candidates
      */
     getCandidate = () => {
         if (!this.candidates) {
@@ -39,7 +39,7 @@ export class Logic {
         }
         let cQty = this.candidates.length;
         let cIdx = Logic.getRandomInt(0, cQty);
-        return this.candidates[cIdx];
+        return UTIL.asNArray(this.candidates[cIdx]);
     };
 
     buildCandidates = () => {

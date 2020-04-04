@@ -14,7 +14,8 @@ export class App extends React.PureComponent {
             userTries: [],
             compTries: [],
             handlers: {
-                onChangeKey: this.changeKey,
+                onChangeNumberKey: this.changeNumberKey,
+                onChangeRateKey: this.changeRateKey,
                 onSendTry: this.sendTry,
                 getState: this.getState,
             },
@@ -68,14 +69,21 @@ export class App extends React.PureComponent {
             // send comp try?
             if (!newState.compDone) {
                 let compTryDigits = this.logic.getCandidate(oldState);
-                newState = SU.addCompTry(newState, compTryDigits);
+                let compTry = {
+                    ...SU.emptyCompTry,
+                    digitVals: compTryDigits,
+                    showRateFlds: true,
+                };
+                // newState = SU.addCompTry(newState, compTryDigits);
+                newState.compTries = [compTry];
             }
 
+            console.log('App -> sendTry -> newState', newState);
             return newState;
         });
     };
 
-    changeKey = (event, fldId) => {
+    changeNumberKey = (event, fldId) => {
         let eventValue = event.target.value;
         this.setState(oldState => {
             console.log('App -> changeKey -> state entering: ', oldState);
@@ -85,11 +93,7 @@ export class App extends React.PureComponent {
             let newUserTry;
 
             if (eventValue) {
-                if (kType === 'd') {
-                    newUserTry = this.handleDigitAdded(currentUserTry, kType, kIdx, eventValue);
-                } else {
-                    newUserTry = this.handleRateAdded(currentUserTry, kType, kIdx, eventValue);
-                }
+                newUserTry = this.handleDigitAdded(currentUserTry, kIdx, eventValue);
             } else {
                 // value removed from field
                 newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
@@ -100,13 +104,31 @@ export class App extends React.PureComponent {
         });
     };
 
+    changeRateKey = (event, fldId) => {
+        let eventValue = event.target.value;
+        this.setState(oldState => {
+            console.log('App -> changeRateKey -> state entering: ', oldState);
+            let currentCompTry = SU.getCurrentCompTry(oldState);
+            let newCompTry;
+
+            if (eventValue) {
+                newCompTry = this.handleRateAdded(currentCompTry, fldId, eventValue);
+            } else {
+                // value removed from field
+                newCompTry = this.handleFieldRemoved(currentCompTry, fldId);
+            }
+            let newState = SU.replLastCompTry(oldState, newCompTry);
+            return newState;
+        });
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////
     //  Event handler helpers
     //////////////////////////////////////////////////////////////////////////////////////////
 
     getFldKey = value => Object.keys(FLD_NAMES).find(key => FLD_NAMES[key] === value);
 
-    handleDigitAdded(currentUserTry, kType, kIdx, digit) {
+    handleDigitAdded(currentUserTry, kIdx, digit) {
         let newDigitVals = [...currentUserTry.digitVals];
         newDigitVals[kIdx] = digit;
 
@@ -122,9 +144,9 @@ export class App extends React.PureComponent {
         return newTryState;
     }
 
-    handleRateAdded(currentUserTry, kType, kIdx, rate) {
+    handleRateAdded(currentUserTry, fldId, rate) {
         let newTryState = { ...currentUserTry };
-        if (kIdx === 'g') {
+        if (this.getFldKey(fldId) === 'rg') {
             newTryState.rg = rate;
             // also make rate btn visible ?
             if (currentUserTry.rr) {

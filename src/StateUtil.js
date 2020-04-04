@@ -61,3 +61,22 @@ export function getCurrentUserTry(state) {
     }
     return state.userTries.slice(-1)[0];
 }
+
+export function getCurrentCompTry(state) {
+    if (state.compTries.length < 1) {
+        throw 'state.userTries is empty';
+    }
+    return state.compTries.slice(-1)[0];
+}
+
+/**
+ * Returns a new state with the received try replacing
+ * the last entry of the received state's compTries
+ * @param {*} state sample state
+ * @param {*} aTry comp try to replace last compTries entry
+ */
+export function replLastCompTry(oldState, newTry) {
+    let newTries = [...oldState.compTries];
+    newTries[newTries.length - 1] = newTry;
+    return { ...oldState, compTries: newTries };
+}

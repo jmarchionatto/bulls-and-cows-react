@@ -83,8 +83,19 @@ function hasDigitsRepeated(n) {
     return false;
 }
 
+/**
+ * Return received number as a zero padded four element array
+ * @param {*} n
+ */
 export function asNArray(n) {
     let strDigits = ('' + n).split('');
+    if (strDigits.length < 3) {
+        throw 'Received number has less than 3 digits';
+    }
+
+    if (strDigits.length === 3) {
+        strDigits = ['0', ...strDigits];
+    }
     return strDigits.map(Number);
 }
 
