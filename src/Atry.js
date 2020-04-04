@@ -29,7 +29,7 @@ const RateDiv = styled.div`
 
 class Atry extends React.PureComponent {
     constructor(props) {
-        super();
+        super(props);
         console.log('Atry -> constructor -> props', props);
     }
 
