@@ -17,6 +17,7 @@ export class App extends React.PureComponent {
                 onChangeNumberKey: this.changeNumberKey,
                 onChangeRateKey: this.changeRateKey,
                 onSendTry: this.sendTry,
+                onSendRate: this.sendRate,
                 getState: this.getState,
             },
         };
@@ -74,11 +75,29 @@ export class App extends React.PureComponent {
                     digitVals: compTryDigits,
                     showRateFlds: true,
                 };
-                // newState = SU.addCompTry(newState, compTryDigits);
-                newState.compTries = [compTry];
+                newState.compTries = [...newState.compTries, compTry];
             }
 
             console.log('App -> sendTry -> newState', newState);
+            return newState;
+        });
+    };
+
+    sendRate = (e, rg, rr) => {
+        this.setState(oldState => {
+            console.log('App -> sendrate oldState: ', oldState);
+
+            // record rate in last compTry
+            let currentCompTry = SU.getCurrentCompTry(oldState);
+            currentCompTry.rg = rg;
+            currentCompTry.rr = rr;
+            let newState = SU.replLastCompTry(oldState, currentCompTry);
+
+            // add empty user try
+            newState.userTries = [...oldState.userTries, SU.emptyUserTry];
+            newState.showRateFlds = true;
+            console.log('App -> sendrate newState: ', newState);
+
             return newState;
         });
     };
