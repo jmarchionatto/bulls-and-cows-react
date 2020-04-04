@@ -22,13 +22,23 @@ const InputTxt = styled.input`
 class Digit extends React.PureComponent {
     constructor(props) {
         super();
-        // this.props = { ...props };
+        this.handlers = props.onCh;
         // console.log('Digit -> constructor -> props', props);
     }
 
     handleChange = e => {
-        this.props.onCh(e, this.props.dn);
-        this.setState({ ...this.setState, value: e.target.value });
+        console.log(
+            'Digit -> handleChange App.state before: ',
+            this.handlers.getState().userTries.slice(-1)[0].digitVals
+        );
+
+        this.handlers.onChangeKey(e, this.props.dn);
+        // this.setState({ value: e.target.value });
+
+        console.log(
+            'Digit -> handleChange App.state after: ',
+            this.handlers.getState().userTries.slice(-1)[0].digitVals
+        );
     };
 
     render() {
@@ -48,7 +58,8 @@ class Digit extends React.PureComponent {
 Digit.propTypes = {
     value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     readOnly: PropTypes.bool,
-    onCh: PropTypes.func.isRequired,
+    // onCh: PropTypes.func.isRequired,
+    onCh: PropTypes.any,
     first: PropTypes.bool,
     dn: PropTypes.string,
 };

@@ -50,7 +50,7 @@ class Atry extends React.PureComponent {
                     <Digit4
                         digitVals={this.props.try.digitVals}
                         readOnly={this.props.try.valsRO}
-                        onDigitCh={this.props.handlers.onChangeKey}
+                        onDigitCh={this.props.handlers}
                     />
                 </DivTc>
                 <RateDiv visib={this.props.try.showRateFlds}>

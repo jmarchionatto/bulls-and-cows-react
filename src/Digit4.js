@@ -34,7 +34,8 @@ Digit4.propTypes = {
         }
     }),
     readOnly: PropTypes.bool,
-    onDigitCh: PropTypes.func.isRequired,
+    // onDigitCh: PropTypes.func.isRequired,
+    onDigitCh: PropTypes.object,
 };
 
 export default Digit4;

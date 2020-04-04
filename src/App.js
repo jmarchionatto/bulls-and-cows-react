@@ -5,7 +5,7 @@ import Logic from './Logic';
 import * as SU from './StateUtil';
 import { FLD_NAMES } from './Const';
 
-class App extends React.PureComponent {
+export class App extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,13 +16,18 @@ class App extends React.PureComponent {
             handlers: {
                 onChangeKey: this.changeKey,
                 onSendTry: this.sendTry,
+                getState: this.getState,
             },
         };
-        process.nextTick(() => {
-            // because takes some processing
-            this.logic = new Logic();
-        });
     }
+
+    componentDidMount() {
+        // here because takes some processing
+        this.logic = new Logic();
+    }
+
+    // debugging purposes
+    getState = () => this.state;
 
     //////////////////////////////////////////////////////////////////////////////
     // Handlers sent down to components
@@ -69,6 +74,7 @@ class App extends React.PureComponent {
     };
 
     changeKey = (event, fldId) => {
+        console.log('App -> changeKey -> this.state entering: ', this.state);
         let [kType, kIdx] = this.getFldKey(fldId);
 
         let currentUserTry = SU.getCurrentUserTry(this.state);
@@ -85,8 +91,10 @@ class App extends React.PureComponent {
             newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
         }
         let newState = SU.replLastUserTry(this.state, newUserTry);
+
+        console.log('App -> changeKey -> this.state before setState: ', this.state);
+        console.log('App -> changeKey -> newState before setState: ', newState);
         this.setState(newState, () => {
-            console.log('App -> changeKey -> newState set: ', newState);
             console.log('App -> changeKey -> this.state: ', this.state);
         });
     };
@@ -147,11 +155,9 @@ class App extends React.PureComponent {
         for (const [valIdx, val] of aTry.digitVals.entries()) {
             // testing non strictly on purpose!
             if (valIdx != kIdx && !val) {
-                // console.log('allOtherValsSet -> returning false');
                 return false;
             }
         }
-        // console.log('allOtherValsSet -> returning true');
         return true;
     };
 
@@ -159,14 +165,14 @@ class App extends React.PureComponent {
     //  Render
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    render() {
+    render = () => {
         if (this.state.userTryFirst === null) {
             console.log('rendering AskWhoFirst');
             return <AskWhoFirst onSetWhoFirst={this.setUserTryFirst} />;
         }
         console.log('App -> render -> this.state', this.state);
         return <TriesPanel {...this.state} />;
-    }
+    };
 }
 
 export default App;

@@ -5,14 +5,14 @@ var path = require('path');
 module.exports = {
     mode: 'development',
     entry: {
-        numberchll: './src/Numberchll.js',
+        index: './src/Index.js',
     },
     // devtool: 'eval-source-map',
     devtool: 'eval-inline-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Numbers Challenge',
-            chunks: ['numberchll'],
+            chunks: ['index'],
         }),
     ],
     module: {
