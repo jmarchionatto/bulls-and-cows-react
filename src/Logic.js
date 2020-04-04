@@ -38,7 +38,7 @@ export class Logic {
             this.candidates = this.buildCandidates();
         }
         let cQty = this.candidates.length;
-        let cIdx = Logic.getRandomInt(0, cQty);
+        let cIdx = UTIL.getRandomInt(0, cQty);
         return UTIL.asNArray(this.candidates[cIdx]);
     };
 
@@ -48,15 +48,6 @@ export class Logic {
             candidates.push(cand);
         }
         return candidates;
-    };
-
-    /**
-     * min inclusive and max exclusive
-     */
-    static getRandomInt = (min, max) => {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min)) + min;
     };
 
     getAllCandidates = () => {
