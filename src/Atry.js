@@ -34,8 +34,13 @@ class Atry extends React.PureComponent {
     }
 
     sendTry = e => {
-        console.log('Atry -> e', e);
+        console.log('Atry -> sendTry e', e);
         this.props.handlers.onSendTry(e);
+    };
+
+    sendRate = e => {
+        console.log('Atry -> sendRate e', e);
+        this.props.handlers.onSendRate(e, this.props.try.rg, this.props.try.rr);
     };
 
     render() {
@@ -71,7 +76,11 @@ class Atry extends React.PureComponent {
                         />
                     </DivTc>
                     <DivTc>
-                        <SubBtn type="submit" visib={this.props.try.showRateBtn}>
+                        <SubBtn
+                            type="submit"
+                            visib={this.props.try.showRateBtn}
+                            onClick={this.sendRate}
+                        >
                             Rate
                         </SubBtn>
                     </DivTc>
