@@ -18,12 +18,10 @@ export const emptyCompTry = {
  * @param {*} state sample state
  * @param {*} aTry user try to replace last uesrTries entry
  */
-export function replLastUserTry(state, aTry) {
-    let newState = {
-        ...state,
-    };
-    newState.userTries[newState.userTries.length - 1] = aTry;
-    return newState;
+export function replLastUserTry(oldState, newTry) {
+    let newTries = [...oldState.userTries];
+    newTries[newTries.length - 1] = newTry;
+    return { ...oldState, userTries: newTries };
 }
 
 /**
