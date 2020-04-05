@@ -30,16 +30,16 @@ const RateDiv = styled.div`
 class Atry extends React.PureComponent {
     constructor(props) {
         super(props);
-        console.log('Atry -> constructor -> props', props);
+        // console.log('Atry -> constructor -> props', props);
     }
 
     sendTry = e => {
-        console.log('Atry -> sendTry e', e);
+        // console.log('Atry -> sendTry e', e);
         this.props.handlers.onSendTry(e);
     };
 
     sendRate = e => {
-        console.log('Atry -> sendRate e', e);
+        // console.log('Atry -> sendRate e', e);
         this.props.handlers.onSendRate(e, this.props.try.rg, this.props.try.rr);
     };
 

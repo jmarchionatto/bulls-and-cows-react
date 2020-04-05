@@ -28,13 +28,13 @@ export class Logic {
         this.candidateIt = this.allcandidatesIt.bind(this);
     }
 
-    rateTry = (num, tryArr) => {
-        let rate = UTIL.rate(UTIL.asNArray(num), tryArr);
-        this.adjustCandidates(num, rate);
-        return rate;
+    rateTry = (compNum, tryArr) => {
+        return UTIL.rate(UTIL.asNArray(compNum), tryArr);
     };
 
     reduceCandidates = rating => {
+        console.log('Logic -> reducing candidates for rating:', rating);
+
         let newCandidates = [];
         for (const cand of this.filteredCandidatesIt(rating)) {
             newCandidates.push(cand);
@@ -77,6 +77,8 @@ export class Logic {
     getCandidateArr = () => {
         return UTIL.asNArray(this.getCandidate());
     };
+
+    getCandLen = () => this.candidates.length;
 
     /**
      * Yields all possible 4 unique-digit numbers

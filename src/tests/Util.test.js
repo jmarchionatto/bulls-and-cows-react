@@ -44,27 +44,39 @@ describe('Util', () => {
     });
 
     describe('matchesRating', () => {
-        // number could be: 3715
-        const ratings = [
-            {
-                numArr: 2751,
-                rg: 1,
-                rr: 2,
-            },
-            {
-                numArr: 6718,
-                rg: 2,
-                rr: 0,
-            },
-        ];
-
         it('still available < 9876', () => {
-            let res = UTIL.matchesRatings(3715, ratings);
+            const rating = {
+                num: 2751,
+                rtg: {
+                    good: 1,
+                    reg: 2,
+                },
+            };
+            let res = UTIL.matchesRating(3715, rating);
             expect(res).toBe(true);
         });
 
-        it('no available < 9876', () => {
-            let res = UTIL.matchesRatings(9876, ratings);
+        it('still available < 9876', () => {
+            const rating = {
+                num: 2751,
+                rtg: {
+                    good: 1,
+                    reg: 1,
+                },
+            };
+            let res = UTIL.matchesRating(2910, rating);
+            expect(res).toBe(true);
+        });
+
+        it('still available < 9876', () => {
+            const rating = {
+                num: 2751,
+                rtg: {
+                    good: 1,
+                    reg: 1,
+                },
+            };
+            let res = UTIL.matchesRating(2710, rating);
             expect(res).toBe(false);
         });
     });

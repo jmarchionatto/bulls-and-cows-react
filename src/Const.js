@@ -1,3 +1,5 @@
+export const DEBUG_REDUCING_CANDIDATES = false;
+
 export const FLD_NAMES = {
     d0: 'digit-0',
     d1: 'digit-1',

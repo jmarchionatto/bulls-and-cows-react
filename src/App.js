@@ -3,11 +3,13 @@ import AskWhoFirst from './AskWhoFirst';
 import TriesPanel from './TriesPanel';
 import Logic from './Logic';
 import * as SU from './StateUtil';
-import { FLD_NAMES } from './Const';
+import { DEBUG_REDUCING_CANDIDATES, FLD_NAMES } from './Const';
+import { showCandidates, asNumber } from './Util';
 
 export class App extends React.PureComponent {
     constructor(props) {
         super(props);
+        this.afterUpdateOperations = [];
         this.state = {
             // true if user tries first
             userTryFirst: null,
@@ -26,6 +28,14 @@ export class App extends React.PureComponent {
     componentDidMount() {
         // here because takes some processing
         this.logic = new Logic();
+    }
+
+    componentDidUpdate() {
+        // any scheduled operations?
+        for (const funct of this.afterUpdateOperations) {
+            funct();
+        }
+        this.afterUpdateOperations = [];
     }
 
     // debugging purposes
@@ -93,6 +103,23 @@ export class App extends React.PureComponent {
             currentCompTry.rr = rr;
             let newState = SU.replLastCompTry(oldState, currentCompTry);
 
+            const rating = {
+                num: asNumber(currentCompTry.digitVals),
+                rtg: {
+                    good: rg,
+                    reg: rr,
+                },
+            };
+
+            // schedule candidate reduction for after update
+            this.afterUpdateOperations.push(() => {
+                this.logic.reduceCandidates(rating);
+                if (DEBUG_REDUCING_CANDIDATES) {
+                    newState.candLen = this.logic.getCandLen();
+                    showCandidates(this.logic.candidates);
+                }
+            });
+
             // add empty user try
             newState.userTries = [...oldState.userTries, SU.emptyUserTry];
             newState.showRateFlds = true;
@@ -105,7 +132,7 @@ export class App extends React.PureComponent {
     changeNumberKey = (event, fldId) => {
         let eventValue = event.target.value;
         this.setState(oldState => {
-            console.log('App -> changeKey -> state entering: ', oldState);
+            // console.log('App -> changeKey -> state entering: ', oldState);
             let [kType, kIdx] = this.getFldKey(fldId);
 
             let currentUserTry = SU.getCurrentUserTry(oldState);
@@ -126,7 +153,7 @@ export class App extends React.PureComponent {
     changeRateKey = (event, fldId) => {
         let eventValue = event.target.value;
         this.setState(oldState => {
-            console.log('App -> changeRateKey -> state entering: ', oldState);
+            // console.log('App -> changeRateKey -> state entering: ', oldState);
             let currentCompTry = SU.getCurrentCompTry(oldState);
             let newCompTry;
 

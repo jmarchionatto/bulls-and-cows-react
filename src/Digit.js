@@ -22,7 +22,7 @@ const InputTxt = styled.input`
 class Digit extends React.PureComponent {
     constructor(props) {
         super(props);
-        console.log('Digit -> constructor -> props', props);
+        // console.log('Digit -> constructor -> props', props);
     }
 
     handleChange = e => {

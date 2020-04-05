@@ -30,7 +30,8 @@ export function matchesRating(n, rating) {
             }
         }
     }
-    return good === rating.rtg.good && reg === rating.rtg.reg;
+    // non-strict tests on purpose
+    return good == rating.rtg.good && reg == rating.rtg.reg;
 }
 
 export function rate(nArr, tryArr) {
@@ -69,7 +70,7 @@ export function getNextUniqueDigits(n) {
  * If number has only 3 digits, array must be added a leading zero
  * or other zeros won;t be recognized as duplicated digits
  */
-function hasDigitsRepeated(n) {
+export function hasDigitsRepeated(n) {
     let digArr = asNArray(n);
     if (digArr.length === 3) {
         digArr = [0, ...digArr];
@@ -111,4 +112,15 @@ export function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+export function showCandidates(cands) {
+    if (cands.length === 0) {
+        console.log('There is no candidates');
+    }
+    let i = 0;
+    while (i < cands.length) {
+        console.log(`cands [${i}-${i + 99}]`, cands.slice(i, i + 99));
+        i += 100;
+    }
 }
