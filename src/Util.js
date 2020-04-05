@@ -1,5 +1,5 @@
 /**
- * Numbers and ratings utilities
+ * Some utilities
  *
  * @see ratings schema in Logic.js
  *
@@ -7,6 +7,7 @@
  */
 
 import Logic from './Logic';
+import * as CONST from './Const';
 
 /**
  * Rating format is:
@@ -123,4 +124,8 @@ export function showCandidates(cands) {
         console.log(`cands [${i}-${i + 99}]`, cands.slice(i, i + 99));
         i += 100;
     }
+}
+
+export function getFldKey(value) {
+    return Object.keys(CONST.FLD_NAMES).find(key => CONST.FLD_NAMES[key] === value);
 }

@@ -25,10 +25,10 @@ class Digit extends React.PureComponent {
         // console.log('Digit -> constructor -> props', props);
     }
 
-    handleChange = e => {
-        this.props.onCh(e, this.props.dn);
-        // this.setState({ value: e.target.value });
-    };
+    // handleChange = e => {
+    //     this.props.onCh(e, this.props.dn);
+    //     // this.setState({ value: e.target.value });
+    // };
 
     render() {
         return (
@@ -38,7 +38,8 @@ class Digit extends React.PureComponent {
                 value={this.props.value}
                 first={this.props.first}
                 readonly={this.props.readOnly}
-                onChange={this.handleChange}
+                onChange={e => this.props.onCh(e, this.props.dn)}
+                ref={this.props.inptRef}
             />
         );
     }
@@ -50,6 +51,7 @@ Digit.propTypes = {
     onCh: PropTypes.func.isRequired,
     first: PropTypes.bool,
     dn: PropTypes.string,
+    inptRef: PropTypes.object.isRequired,
 };
 
 export default Digit;

@@ -3,8 +3,8 @@ import AskWhoFirst from './AskWhoFirst';
 import TriesPanel from './TriesPanel';
 import Logic from './Logic';
 import * as SU from './StateUtil';
-import { DEBUG_REDUCING_CANDIDATES, FLD_NAMES } from './Const';
-import { showCandidates, asNumber } from './Util';
+import { DEBUG_REDUCING_CANDIDATES } from './Const';
+import * as UTIL from './Util';
 
 export class App extends React.PureComponent {
     constructor(props) {
@@ -104,7 +104,7 @@ export class App extends React.PureComponent {
             let newState = SU.replLastCompTry(oldState, currentCompTry);
 
             const rating = {
-                num: asNumber(currentCompTry.digitVals),
+                num: UTIL.asNumber(currentCompTry.digitVals),
                 rtg: {
                     good: rg,
                     reg: rr,
@@ -116,7 +116,7 @@ export class App extends React.PureComponent {
                 this.logic.reduceCandidates(rating);
                 if (DEBUG_REDUCING_CANDIDATES) {
                     newState.candLen = this.logic.getCandLen();
-                    showCandidates(this.logic.candidates);
+                    UTIL.showCandidates(this.logic.candidates);
                 }
             });
 
@@ -133,7 +133,7 @@ export class App extends React.PureComponent {
         let eventValue = event.target.value;
         this.setState(oldState => {
             // console.log('App -> changeKey -> state entering: ', oldState);
-            let [kType, kIdx] = this.getFldKey(fldId);
+            let [kType, kIdx] = UTIL.getFldKey(fldId);
 
             let currentUserTry = SU.getCurrentUserTry(oldState);
             let newUserTry;
@@ -172,8 +172,6 @@ export class App extends React.PureComponent {
     //  Event handler helpers
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    getFldKey = value => Object.keys(FLD_NAMES).find(key => FLD_NAMES[key] === value);
-
     handleDigitAdded(currentUserTry, kIdx, digit) {
         let newDigitVals = [...currentUserTry.digitVals];
         newDigitVals[kIdx] = digit;
@@ -192,7 +190,7 @@ export class App extends React.PureComponent {
 
     handleRateAdded(currentUserTry, fldId, rate) {
         let newTryState = { ...currentUserTry };
-        if (this.getFldKey(fldId) === 'rg') {
+        if (UTIL.getFldKey(fldId) === 'rg') {
             newTryState.rg = rate;
             // also make rate btn visible ?
             if (currentUserTry.rr) {
