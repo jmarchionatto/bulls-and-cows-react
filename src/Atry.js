@@ -32,6 +32,7 @@ const RateDiv = styled.div`
 class Atry extends React.PureComponent {
     constructor(props) {
         super(props);
+        // console.log('Atry -> constructor -> props', props);
 
         this.digitRefs = [];
         for (let i = 0; i < 4; i++) {
@@ -40,7 +41,8 @@ class Atry extends React.PureComponent {
 
         this.rgRef = React.createRef();
         this.rrRef = React.createRef();
-        // console.log('Atry -> constructor -> props', props);
+        this.sendTryBtnRef = React.createRef();
+        this.sendRateBtnRef = React.createRef();
     }
 
     sendTry = e => {
@@ -55,6 +57,7 @@ class Atry extends React.PureComponent {
 
     onDigitChange = (e, dn) => {
         let [kType, kIdx] = getFldKey(dn);
+        console.log('Atry -> onDigitChange -> kType, kIdx', kType, kIdx);
 
         // forward event
         if (kType === 'd') {
@@ -63,24 +66,40 @@ class Atry extends React.PureComponent {
             this.props.handlers.onChangeRateKey(e, dn);
         }
 
-        console.log('Atry -> onDigitChange -> e.target.value', e.target.value);
-        console.log('Atry -> onDigitChange -> dn', dn);
-
         // handle focus
         if (!e.target.value) return; // keep focus in same field
 
         if (kType === 'd') {
             // move focus to next digit or to submit button if last digit
-            kIdx = Number(kIdx);
-            if (kIdx <= 2) {
-                this.digitRefs[kIdx + 1].current.focus();
+            if (kIdx == '3') {
+                this.scheduleAction(() => {
+                    this.sendTryBtnRef.current.focus();
+                });
+            } else {
+                kIdx = Number(kIdx);
+                if (kIdx <= 2) {
+                    this.digitRefs[kIdx + 1].current.focus();
+                }
             }
         } else {
             if (kIdx === 'g') {
                 this.rrRef.current.focus();
+            } else {
+                this.scheduleAction(() => {
+                    this.sendRateBtnRef.current.focus();
+                });
             }
         }
     };
+
+    scheduleAction(action) {
+        this.scheduledActions = this.scheduledActions || [];
+        this.scheduledActions.push(action);
+        console.log(
+            'Atry -> scheduleAction -> this.scheduledActions after push',
+            this.scheduledActions
+        );
+    }
 
     componentDidMount = () => {
         if (this.props.try.digitVals[0] === '') {
@@ -92,11 +111,24 @@ class Atry extends React.PureComponent {
         }
     };
 
+    componentDidUpdate = () => {
+        if (this.scheduledActions) {
+            for (const action of this.scheduledActions) {
+                action();
+            }
+        }
+    };
+
     render() {
         return (
             <DivT>
                 <DivTc>
-                    <SubBtn type="submit" visib={this.props.try.showSendTry} onClick={this.sendTry}>
+                    <SubBtn
+                        type="submit"
+                        visib={this.props.try.showSendTry}
+                        onClick={this.sendTry}
+                        ref={this.sendTryBtnRef}
+                    >
                         Send Try
                     </SubBtn>
                 </DivTc>
@@ -132,6 +164,7 @@ class Atry extends React.PureComponent {
                             type="submit"
                             visib={this.props.try.showRateBtn}
                             onClick={this.sendRate}
+                            ref={this.sendRateBtnRef}
                         >
                             Rate
                         </SubBtn>
