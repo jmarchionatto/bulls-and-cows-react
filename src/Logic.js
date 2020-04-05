@@ -10,10 +10,12 @@ import * as UTIL from './Util';
  */
 
 // ratings schema
-// const ratings = [{
-//     numArr: Number[123-9876] (no repeated digits)
-//     rg: Number[0-4],
-//     rg: Number[0-4]
+// const rating = [{
+//     num: Number[123-9876] (no repeated digits)
+//     rtg: {
+//        rg: Number[0-4],
+//        rr: Number[0-4]
+//     }
 // }];
 
 export class Logic {
@@ -23,11 +25,22 @@ export class Logic {
     constructor() {
         this.ratings = [];
         this.candidates = null;
-        this.candidateIt = this.candidateIt.bind(this);
+        this.candidateIt = this.allcandidatesIt.bind(this);
     }
 
     rateTry = (num, tryArr) => {
-        return UTIL.rate(UTIL.asNArray(num), tryArr);
+        let rate = UTIL.rate(UTIL.asNArray(num), tryArr);
+        this.adjustCandidates(num, rate);
+        return rate;
+    };
+
+    reduceCandidates = rating => {
+        let newCandidates = [];
+        for (const cand of this.filteredCandidatesIt(rating)) {
+            newCandidates.push(cand);
+        }
+        this.ratings.push(rating);
+        this.candidates = newCandidates;
     };
 
     /**
@@ -35,22 +48,17 @@ export class Logic {
      */
     getCandidate = () => {
         if (!this.candidates) {
-            this.candidates = this.buildCandidates();
+            this.buildCandidates();
         }
         let cQty = this.candidates.length;
         let cIdx = UTIL.getRandomInt(0, cQty);
-        return UTIL.asNArray(this.candidates[cIdx]);
-    };
-
-    buildCandidates = () => {
-        let candidates = [];
-        for (const cand of this.candidateIt()) {
-            candidates.push(cand);
-        }
-        return candidates;
+        return this.candidates[cIdx];
     };
 
     getAllCandidates = () => {
+        if (!this.candidates) {
+            this.buildCandidates();
+        }
         let c = [];
         for (const cand of this.candidates) {
             c.push(cand);
@@ -58,25 +66,47 @@ export class Logic {
         return c;
     };
 
-    /**
-     * Yields all possible 4 unique-digits numbers representing a candidate,
-     * which means that match all the current ratings
-     */
-    *candidateIt() {
-        const last = 9876;
+    buildCandidates = () => {
+        let candidates = [];
+        for (const cand of this.allcandidatesIt()) {
+            candidates.push(cand);
+        }
+        this.candidates = candidates;
+    };
 
+    getCandidateArr = () => {
+        return UTIL.asNArray(this.getCandidate());
+    };
+
+    /**
+     * Yields all possible 4 unique-digit numbers
+     */
+    *allcandidatesIt() {
         let n = 123;
         yield n;
 
-        while (n <= last) {
+        while (n <= Logic.MAX) {
             n = UTIL.getNextUniqueDigits(n);
             if (isNaN(n)) return;
-
-            while (!UTIL.matchesRatings(n, this.ratings)) {
-                n = UTIL.getNextUniqueDigits(n);
-                if (isNaN(n)) return;
-            }
             yield n;
+        }
+    }
+
+    /**
+     * Yields candidate matching the received rating for the received number
+     */
+    *filteredCandidatesIt(rating) {
+        // console.log('--------------------------------------------------------');
+        // console.log('Logic -> *filteredCandidatesIt -> entering method');
+
+        for (let cand of this.candidates) {
+            // console.log('Logic -> *filteredCandidatesIt -> started outer for loop', cand);
+
+            if (!isNaN(cand) && UTIL.matchesRating(cand, rating)) {
+                // console.log('Logic -> *filteredCandidatesIt -> tielding cand', cand);
+                // console.log('--------------------------------------------------------');
+                yield cand;
+            }
         }
     }
 }

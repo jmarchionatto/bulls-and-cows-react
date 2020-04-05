@@ -8,20 +8,21 @@
 
 import Logic from './Logic';
 
-export function matchesRatings(n, ratings) {
-    for (const r of ratings) {
-        if (!matchesRating(n, r)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-function matchesRating(n, rating) {
+/**
+ * Rating format is:
+ * @param rating = {
+ *    num: Number[123-9876] (no repeated digits)
+ *    rtg: {
+ *       rg: Number[0-4],
+ *       rr: Number[0-4]
+ *    }
+ * }
+ */
+export function matchesRating(n, rating) {
     let good = 0,
         reg = 0;
     let nArr = asNArray(n);
-    let rateArr = asNArray(rating.numArr);
+    let rateArr = asNArray(rating.num);
     for (const [nIdx, nDig] of nArr.entries()) {
         for (const [rIdx, rDig] of rateArr.entries()) {
             if (nDig === rDig) {
@@ -29,7 +30,7 @@ function matchesRating(n, rating) {
             }
         }
     }
-    return good === rating.rg && reg === rating.rr;
+    return good === rating.rtg.good && reg === rating.rtg.reg;
 }
 
 export function rate(nArr, tryArr) {

@@ -39,12 +39,12 @@ export class App extends React.PureComponent {
         this.setState(oldState => {
             let newState = {
                 ...oldState,
-                compNumber: this.logic.getCandidate(), // 'think' comp number
+                compNumber: this.logic.getCandidateArr(), // 'think' comp number
                 userTryFirst: userTryFirst,
                 userTries: userTryFirst ? [SU.emptyUserTry] : [],
             };
             if (userTryFirst) {
-                let compTryDigits = this.logic.getCandidate(oldState);
+                let compTryDigits = this.logic.getCandidateArr(oldState);
                 SU.addCompTry(newState, compTryDigits);
             }
             return newState;
@@ -69,7 +69,7 @@ export class App extends React.PureComponent {
 
             // send comp try?
             if (!newState.compDone) {
-                let compTryDigits = this.logic.getCandidate(oldState);
+                let compTryDigits = this.logic.getCandidateArr(oldState);
                 let compTry = {
                     ...SU.emptyCompTry,
                     digitVals: compTryDigits,
