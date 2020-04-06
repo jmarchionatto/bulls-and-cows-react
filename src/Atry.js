@@ -18,7 +18,7 @@ const DivTc = styled.div`
 `;
 
 const SubBtn = styled.button`
-    visibility: ${props => props.visib || 'hidden'};
+    visibility: ${(props) => props.visib || 'hidden'};
     width: 4em;
     height: 3em;
     text-align: center;
@@ -26,7 +26,7 @@ const SubBtn = styled.button`
 `;
 
 const RateDiv = styled.div`
-    visibility: ${props => props.visib || 'hidden'};
+    visibility: ${(props) => props.visib || 'hidden'};
 `;
 
 class Atry extends React.PureComponent {
@@ -45,19 +45,19 @@ class Atry extends React.PureComponent {
         this.sendRateBtnRef = React.createRef();
     }
 
-    sendTry = e => {
+    sendTry = (e) => {
         // console.log('Atry -> sendTry e', e);
         this.props.handlers.onSendTry(e);
     };
 
-    sendRate = e => {
+    sendRate = (e) => {
         // console.log('Atry -> sendRate e', e);
         this.props.handlers.onSendRate(e, this.props.try.rg, this.props.try.rr);
     };
 
     onDigitChange = (e, dn) => {
         let [kType, kIdx] = getFldKey(dn);
-        console.log('Atry -> onDigitChange -> kType, kIdx', kType, kIdx);
+        // console.log('Atry -> onDigitChange -> kType, kIdx', kType, kIdx);
 
         // forward event
         if (kType === 'd') {
@@ -95,10 +95,10 @@ class Atry extends React.PureComponent {
     scheduleAction(action) {
         this.scheduledActions = this.scheduledActions || [];
         this.scheduledActions.push(action);
-        console.log(
-            'Atry -> scheduleAction -> this.scheduledActions after push',
-            this.scheduledActions
-        );
+        // console.log(
+        //     'Atry -> scheduleAction -> this.scheduledActions after push',
+        //     this.scheduledActions
+        // );
     }
 
     componentDidMount = () => {
