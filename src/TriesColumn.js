@@ -13,6 +13,10 @@ const StH3 = styled.h3`
 `;
 
 class TriesColumn extends React.PureComponent {
+    // componentDidUpdate = () => {
+    //     console.log('TriesColumn -> componentDidUpdate -> try:', this.props.tries);
+    // };
+
     render() {
         let tryElements = [];
         this.props.tries.map((aTry, i) => {
