@@ -29,12 +29,11 @@ export class Logic {
     }
 
     rateTry = (compNum, tryArr) => {
-        return UTIL.rate(UTIL.asNArray(compNum), tryArr);
+        const cnArr = UTIL.asNArray(compNum);
+        return UTIL.rate(cnArr, tryArr);
     };
 
-    reduceCandidates = rating => {
-        console.log('Logic -> reducing candidates for rating:', rating);
-
+    reduceCandidates = (rating) => {
         let newCandidates = [];
         for (const cand of this.filteredCandidatesIt(rating)) {
             newCandidates.push(cand);

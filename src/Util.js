@@ -36,6 +36,7 @@ export function matchesRating(n, rating) {
 }
 
 export function rate(nArr, tryArr) {
+    console.log('rate -> nArr, tryArr', nArr, tryArr);
     let good = 0,
         reg = 0;
     for (const [nIdx, nDig] of nArr.entries()) {
@@ -87,10 +88,15 @@ export function hasDigitsRepeated(n) {
 }
 
 /**
- * Return received number as a zero padded four element array
+ * Return received number as a zero padded four element Number array
  * @param {*} n
  */
 export function asNArray(n) {
+    if (Array.isArray(n)) {
+        if (allNumbers(n)) return n;
+        return n.map(Number);
+    }
+
     let strDigits = ('' + n).split('');
     if (strDigits.length < 3) {
         throw 'Received number has less than 3 digits';
@@ -100,6 +106,13 @@ export function asNArray(n) {
         strDigits = ['0', ...strDigits];
     }
     return strDigits.map(Number);
+}
+
+function allNumbers(arr) {
+    for (const elem of arr) {
+        if (typeof elem !== 'number') return false;
+    }
+    return true;
 }
 
 export function asNumber(nArr) {
@@ -127,5 +140,5 @@ export function showCandidates(cands) {
 }
 
 export function getFldKey(value) {
-    return Object.keys(CONST.FLD_NAMES).find(key => CONST.FLD_NAMES[key] === value);
+    return Object.keys(CONST.FLD_NAMES).find((key) => CONST.FLD_NAMES[key] === value);
 }

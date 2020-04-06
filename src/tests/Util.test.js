@@ -80,4 +80,26 @@ describe('Util', () => {
             expect(res).toBe(false);
         });
     });
+
+    describe('asNarray', () => {
+        it('4 digit number', () => {
+            let res = UTIL.asNArray(3715);
+            expect(res).toStrictEqual([3, 7, 1, 5]);
+        });
+
+        it('3 digit number', () => {
+            let res = UTIL.asNArray(315);
+            expect(res).toStrictEqual([0, 3, 1, 5]);
+        });
+
+        it('is receives string array, returns number array', () => {
+            let res = UTIL.asNArray(['3', '7', '2', '8']);
+            expect(res).toStrictEqual([3, 7, 2, 8]);
+        });
+
+        it('is receives number array, returns same', () => {
+            let res = UTIL.asNArray([3, 7, 2, 8]);
+            expect(res).toStrictEqual([3, 7, 2, 8]);
+        });
+    });
 });
