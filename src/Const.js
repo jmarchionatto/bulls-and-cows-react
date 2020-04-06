@@ -1,4 +1,4 @@
-export const DEBUG_REDUCING_CANDIDATES = false;
+export const DEBUG_REDUCING_CANDIDATES = true;
 
 export const FLD_NAMES = {
     d0: 'digit-0',
