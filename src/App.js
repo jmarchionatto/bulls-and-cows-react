@@ -76,6 +76,7 @@ export class App extends React.PureComponent {
                 ...currentUserTry,
                 rg: rate.good,
                 rr: rate.reg,
+                showSendTry: false,
                 showRateFlds: true,
             };
             newState = SU.replLastUserTry(newState, newUserTry);
@@ -104,17 +105,15 @@ export class App extends React.PureComponent {
             let currentCompTry = SU.getCurrentCompTry(oldState);
             currentCompTry.rg = rg;
             currentCompTry.rr = rr;
+            currentCompTry.showRateBtn = 'hidden';
+
             let newState = SU.replLastCompTry(oldState, currentCompTry);
 
+            // schedule candidate reduction for after update
             const rating = {
                 num: UTIL.asNumber(currentCompTry.digitVals),
-                rtg: {
-                    good: rg,
-                    reg: rr,
-                },
+                rtg: { good: rg, reg: rr },
             };
-
-            // schedule candidate reduction for after update
             this.afterUpdateOperations.push(() => {
                 this.logic.reduceCandidates(rating);
                 if (DEBUG_REDUCING_CANDIDATES) {
@@ -192,20 +191,11 @@ export class App extends React.PureComponent {
     }
 
     handleRateAdded(currentUserTry, fldId, rate) {
-        let newTryState = { ...currentUserTry };
-        if (UTIL.getFldKey(fldId) === 'rg') {
-            newTryState.rg = rate;
-            // also make rate btn visible ?
-            if (currentUserTry.rr) {
-                newTryState.showRateBtn = true;
-            }
-        } else {
-            newTryState.rr = rate;
-            // also make rate btn visible ?
-            if (currentUserTry.rg) {
-                newTryState.showRateBtn = true;
-            }
-        }
+        let newTryState = {
+            ...currentUserTry,
+            [UTIL.getFldKey(fldId)]: rate,
+        };
+        newTryState.showRateBtn = newTryState.rg && newTryState.rr ? 'visible' : 'hidden';
         return newTryState;
     }
 
@@ -214,9 +204,9 @@ export class App extends React.PureComponent {
         if (kType === 'd') {
             let newDigitVals = currentUserTry.digitVals;
             newDigitVals[kIdx] = '';
-            newTryState = { ...currentUserTry, digitVals: newDigitVals, showSendTry: false };
+            newTryState = { ...currentUserTry, digitVals: newDigitVals, showSendTry: 'hidden' };
         } else {
-            newTryState = { ...currentUserTry, [`r${kIdx}`]: '', showRateBtn: false };
+            newTryState = { ...currentUserTry, [`r${kIdx}`]: '', showRateBtn: 'hidden' };
         }
         return newTryState;
     }

@@ -25,11 +25,19 @@ const SubBtn = styled.button`
     border-radius: 10px;
 `;
 
+const RateSubBtn = styled.button`
+    visibility: ${(props) => props.visib || 'hidden'};
+    width: 4em;
+    height: 3em;
+    text-align: center;
+    border-radius: 10px;
+`;
+
 const RateDiv = styled.div`
     visibility: ${(props) => props.visib || 'hidden'};
 `;
 
-class Atry extends React.PureComponent {
+class Atry extends React.Component {
     constructor(props) {
         super(props);
         // console.log('Atry -> constructor -> props', props);
@@ -160,14 +168,14 @@ class Atry extends React.PureComponent {
                         />
                     </DivTc>
                     <DivTc>
-                        <SubBtn
+                        <RateSubBtn
                             type="submit"
                             visib={this.props.try.showRateBtn}
                             onClick={this.sendRate}
                             ref={this.sendRateBtnRef}
                         >
                             Rate
-                        </SubBtn>
+                        </RateSubBtn>
                     </DivTc>
                 </RateDiv>
             </DivT>
