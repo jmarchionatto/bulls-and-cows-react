@@ -12,8 +12,8 @@ export class App extends React.PureComponent {
         this.afterUpdateOperations = [];
         this.state = {
             // true if user tries first
-            userTryFirst: null,
-            userTries: [],
+            userTryFirst: true,
+            userTries: [SU.emptyUserTry],
             compTries: [],
             handlers: {
                 onChangeNumberKey: this.changeNumberKey,
@@ -45,10 +45,9 @@ export class App extends React.PureComponent {
     // Handlers sent down to components
     //////////////////////////////////////////////////////////////////////////////
 
-    setUserTryFirst = userTryFirst => {
-        this.setState(oldState => {
+    setUserTryFirst = (userTryFirst) => {
+        this.setState((oldState) => {
             let newState = {
-                ...oldState,
                 compNumber: this.logic.getCandidateArr(), // 'think' comp number
                 userTryFirst: userTryFirst,
                 userTries: userTryFirst ? [SU.emptyUserTry] : [],
@@ -62,8 +61,12 @@ export class App extends React.PureComponent {
     };
 
     sendTry = () => {
-        this.setState(oldState => {
+        this.setState((oldState) => {
             let newState = { ...oldState };
+
+            // 'think' comp number
+            newState.compNumber = this.logic.getCandidateArr();
+
             // rate try sent and send rate back
             let currentUserTry = SU.getCurrentUserTry(oldState);
             // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
@@ -88,14 +91,14 @@ export class App extends React.PureComponent {
                 newState.compTries = [...newState.compTries, compTry];
             }
 
-            console.log('App -> sendTry -> newState', newState);
+            // console.log('App -> sendTry -> newState', newState);
             return newState;
         });
     };
 
     sendRate = (e, rg, rr) => {
-        this.setState(oldState => {
-            console.log('App -> sendrate oldState: ', oldState);
+        this.setState((oldState) => {
+            // console.log('App -> sendrate oldState: ', oldState);
 
             // record rate in last compTry
             let currentCompTry = SU.getCurrentCompTry(oldState);
@@ -115,7 +118,7 @@ export class App extends React.PureComponent {
             this.afterUpdateOperations.push(() => {
                 this.logic.reduceCandidates(rating);
                 if (DEBUG_REDUCING_CANDIDATES) {
-                    newState.candLen = this.logic.getCandLen();
+                    console.log('%%%%%%%%% new Cand. length: ', this.logic.getCandLen());
                     UTIL.showCandidates(this.logic.candidates);
                 }
             });
@@ -131,7 +134,7 @@ export class App extends React.PureComponent {
 
     changeNumberKey = (event, fldId) => {
         let eventValue = event.target.value;
-        this.setState(oldState => {
+        this.setState((oldState) => {
             // console.log('App -> changeKey -> state entering: ', oldState);
             let [kType, kIdx] = UTIL.getFldKey(fldId);
 
@@ -152,7 +155,7 @@ export class App extends React.PureComponent {
 
     changeRateKey = (event, fldId) => {
         let eventValue = event.target.value;
-        this.setState(oldState => {
+        this.setState((oldState) => {
             // console.log('App -> changeRateKey -> state entering: ', oldState);
             let currentCompTry = SU.getCurrentCompTry(oldState);
             let newCompTry;
