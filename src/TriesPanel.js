@@ -16,7 +16,7 @@ const DivTc = styled.div`
 
 class TriesPanel extends React.PureComponent {
     constructor(props) {
-        super();
+        super(props);
         // console.log('TriesPanel -> constructor -> props', props);
     }
 
