@@ -3,6 +3,8 @@ import regeneratorRuntime from 'regenerator-runtime';
 
 import * as UTIL from './Util';
 import * as SM from './StateMgr';
+import * as CONST from './Const';
+import App from './App';
 
 /**
  * Consolidates all logic about candidate numbers
@@ -111,6 +113,113 @@ export class Logic {
             newState.compTries = [...newState.compTries, newCompTry];
         }
         return newState;
+    };
+
+    getNewCompStateForReceivedRate = (appInst, oldState, rg, rr) => {
+        let currentCompTry = SM.getCurrentCompTry(oldState);
+        let newCurrentCompTry = {
+            ...currentCompTry,
+            rg: rg,
+            rr: rr,
+            showRateBtn: 'hidden',
+        };
+        let newState = SM.replLastCompTry(oldState, newCurrentCompTry);
+
+        // schedule candidate reduction for after update
+        const rating = {
+            num: UTIL.asNumber(currentCompTry.digitVals),
+            rtg: { good: rg, reg: rr },
+        };
+        appInst.scheduleAfterUpdate(() => {
+            this.reduceCandidates(rating);
+
+            let candidateLen = this.getCandLen();
+            if (CONST.DEBUG_REDUCING_CANDIDATES && candidateLen !== 0) {
+                console.log('%%%%%%%%% new Cand. length: ', candidateLen);
+                UTIL.showCandidates(this.candidates);
+            }
+        });
+
+        return newState;
+    };
+
+    getNewStateForChangedNumber = (oldState, kValue, fldId) => {
+        let [kType, kIdx] = UTIL.getFldKey(fldId);
+
+        let currentUserTry = SM.getCurrentUserTry(oldState);
+
+        let newUserTry;
+        if (kValue) {
+            newUserTry = this.handleDigitAdded(currentUserTry, kIdx, kValue);
+        } else {
+            // value removed from field
+            newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
+        }
+        let newState = SM.replLastUserTry(oldState, newUserTry);
+
+        return newState;
+    };
+
+    getNewStateForChangedRateFld = (oldState, kValue, fldId) => {
+        let currentCompTry = SM.getCurrentCompTry(oldState);
+        let newCompTry;
+
+        if (kValue) {
+            newCompTry = this.handleRateAdded(currentCompTry, fldId, kValue);
+        } else {
+            // value removed from field
+            newCompTry = this.handleFieldRemoved(currentCompTry, fldId);
+        }
+        let newState = SM.replLastCompTry(oldState, newCompTry);
+
+        return newState;
+    };
+
+    handleDigitAdded(currentUserTry, kIdx, digit) {
+        let newDigitVals = [...currentUserTry.digitVals];
+        newDigitVals[kIdx] = digit;
+
+        let newTryState = {
+            ...currentUserTry,
+            digitVals: newDigitVals,
+        };
+
+        // must make submit btn visible?
+        if (this.restDigitsSet(currentUserTry, kIdx)) {
+            newTryState.showSendTry = true;
+        }
+        return newTryState;
+    }
+
+    handleRateAdded(currentUserTry, fldId, rate) {
+        let newTryState = {
+            ...currentUserTry,
+            [UTIL.getFldKey(fldId)]: rate,
+        };
+        newTryState.showRateBtn = newTryState.rg && newTryState.rr ? 'visible' : 'hidden';
+        return newTryState;
+    }
+
+    handleFieldRemoved(currentUserTry, kType, kIdx) {
+        let newTryState;
+        if (kType === 'd') {
+            let newDigitVals = currentUserTry.digitVals;
+            newDigitVals[kIdx] = '';
+            newTryState = { ...currentUserTry, digitVals: newDigitVals, showSendTry: 'hidden' };
+        } else {
+            newTryState = { ...currentUserTry, [`r${kIdx}`]: '', showRateBtn: 'hidden' };
+        }
+        return newTryState;
+    }
+
+    restDigitsSet = (aTry, kIdx) => {
+        for (const [valIdx, val] of aTry.digitVals.entries()) {
+            // testing non strictly on purpose!
+            if (valIdx != kIdx && !val) {
+                return false;
+            }
+        }
+        return true;
     };
 
     getCandidateArr = () => {
