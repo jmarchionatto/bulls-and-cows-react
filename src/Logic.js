@@ -2,6 +2,7 @@
 import regeneratorRuntime from 'regenerator-runtime';
 
 import * as UTIL from './Util';
+import * as SM from './StateMgr';
 
 /**
  * Consolidates all logic about candidate numbers
@@ -71,6 +72,45 @@ export class Logic {
             candidates.push(cand);
         }
         this.candidates = candidates;
+    };
+
+    getNewUserStateForReceivedTry = (oldState) => {
+        let newState = { ...oldState };
+
+        // 'think' comp number
+        newState.compNumber = this.getCandidateArr();
+
+        // rate try sent and send rate back
+        let currentUserTry = SM.getCurrentUserTry(oldState);
+        // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
+        // console.log('App -> sendTry -> this.state.compNumber', this.state.compNumber);
+        let rate = this.rateTry(newState.compNumber, currentUserTry.digitVals);
+        let newCurrUserTry = {
+            ...currentUserTry,
+            rg: rate.good,
+            rr: rate.reg,
+            showSendTry: false,
+            showRateFlds: true,
+        };
+        newState = SM.replLastUserTry(newState, newCurrUserTry);
+        return newState;
+    };
+
+    getNewCompStateForReceivedTry = (oldState) => {
+        let newState = { ...oldState };
+        let newCompTry;
+        if (this.candidates.length == 0) {
+            newCompTry.msg = 'CONST.MSG_SOME_RATE_WRONG';
+        } else {
+            let compTryDigits = this.getCandidateArr(oldState);
+            newCompTry = {
+                ...SM.emptyCompTry,
+                digitVals: compTryDigits,
+                showRateFlds: true,
+            };
+            newState.compTries = [...newState.compTries, newCompTry];
+        }
+        return newState;
     };
 
     getCandidateArr = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import AskWhoFirst from './AskWhoFirst';
 import TriesPanel from './TriesPanel';
 import Logic from './Logic';
-import * as SU from './StateUtil';
+import * as SU from './StateMgr';
 import { DEBUG_REDUCING_CANDIDATES } from './Const';
 import * as UTIL from './Util';
 
@@ -10,16 +10,19 @@ export class App extends React.PureComponent {
     constructor(props) {
         super(props);
         this.afterUpdateOperations = [];
+        this.pendingState = {};
         this.state = {
             // true if user tries first
             userTryFirst: true,
             userTries: [SU.emptyUserTry],
             compTries: [],
+            userDone: false,
+            compDone: false,
             handlers: {
                 onChangeNumberKey: this.changeNumberKey,
                 onChangeRateKey: this.changeRateKey,
-                onSendTry: this.sendTry,
-                onSendRate: this.sendRate,
+                onSendTry: this.receiveTry,
+                onSendRate: this.receiveRate,
                 getState: this.getState,
             },
         };
@@ -60,44 +63,20 @@ export class App extends React.PureComponent {
         });
     };
 
-    sendTry = () => {
+    receiveTry = () => {
         this.setState((oldState) => {
-            let newState = { ...oldState };
+            let newState = this.logic.getNewUserStateForReceivedTry(oldState);
 
-            // 'think' comp number
-            newState.compNumber = this.logic.getCandidateArr();
-
-            // rate try sent and send rate back
-            let currentUserTry = SU.getCurrentUserTry(oldState);
-            // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
-            // console.log('App -> sendTry -> this.state.compNumber', this.state.compNumber);
-            let rate = this.logic.rateTry(newState.compNumber, currentUserTry.digitVals);
-            let newUserTry = {
-                ...currentUserTry,
-                rg: rate.good,
-                rr: rate.reg,
-                showSendTry: false,
-                showRateFlds: true,
-            };
-            newState = SU.replLastUserTry(newState, newUserTry);
-
-            // send comp try?
-            if (!newState.compDone) {
-                let compTryDigits = this.logic.getCandidateArr(oldState);
-                let compTry = {
-                    ...SU.emptyCompTry,
-                    digitVals: compTryDigits,
-                    showRateFlds: true,
-                };
-                newState.compTries = [...newState.compTries, compTry];
+            if (!oldState.compDone) {
+                newState = this.logic.getNewCompStateForReceivedTry(newState);
             }
 
-            // console.log('App -> sendTry -> newState', newState);
+            console.log('App -> sendTry -> newState', newState);
             return newState;
         });
     };
 
-    sendRate = (e, rg, rr) => {
+    receiveRate = (e, rg, rr) => {
         this.setState((oldState) => {
             // console.log('App -> sendrate oldState: ', oldState);
 
@@ -116,8 +95,9 @@ export class App extends React.PureComponent {
             };
             this.afterUpdateOperations.push(() => {
                 this.logic.reduceCandidates(rating);
-                if (DEBUG_REDUCING_CANDIDATES) {
-                    console.log('%%%%%%%%% new Cand. length: ', this.logic.getCandLen());
+                let candidateLen = this.logic.getCandLen();
+                if (DEBUG_REDUCING_CANDIDATES && candidateLen !== 0) {
+                    console.log('%%%%%%%%% new Cand. length: ', candidateLen);
                     UTIL.showCandidates(this.logic.candidates);
                 }
             });
