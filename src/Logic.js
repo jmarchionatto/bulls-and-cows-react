@@ -132,7 +132,10 @@ export class Logic {
 
     showWrongAnswers = (newState) => {
         console.log('Logic -> showWrongAnswers -> newState start', newState);
-        let digitVals = SM.getCurrentCompTry(newState).digitVals;
+        let currentCompTry = SM.getCurrentCompTry(newState);
+        currentCompTry.showSendTry = false;
+
+        let digitVals = currentCompTry.digitVals;
         for (let i = 0; i < newState.compTries.length - 1; i++) {
             let compTry = newState.compTries[i];
             let rating = { num: compTry.digitVals, rtg: { rg: compTry.rg, rr: compTry.rr } };
