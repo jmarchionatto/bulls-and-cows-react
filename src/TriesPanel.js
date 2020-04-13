@@ -15,10 +15,10 @@ const DivTc = styled.div`
 `;
 
 class TriesPanel extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        // console.log('TriesPanel -> constructor -> props', props);
-    }
+    // constructor(props) {
+    //     super(props);
+    //     console.log('TriesPanel -> constructor -> props', props);
+    // }
 
     render() {
         if (this.props.userTryFirst) {
@@ -29,12 +29,12 @@ class TriesPanel extends React.PureComponent {
                             tries={this.props.userTries}
                             handlers={this.props.handlers}
                         />
-                        ,
                     </DivTc>
                     <DivTc>
                         <CompTriesColumn
                             tries={this.props.compTries}
                             handlers={this.props.handlers}
+                            discrepVisib={this.props.discrepVisib}
                         />
                     </DivTc>
                 </DivT>
@@ -46,6 +46,7 @@ class TriesPanel extends React.PureComponent {
                         <CompTriesColumn
                             tries={this.props.compTries}
                             handlers={this.props.handlers}
+                            discrepVisib={this.props.discrepVisib}
                         />
                     </DivTc>
                     <DivTc>
@@ -53,7 +54,6 @@ class TriesPanel extends React.PureComponent {
                             tries={this.props.userTries}
                             handlers={this.props.handlers}
                         />
-                        ,
                     </DivTc>
                 </DivT>
             );
@@ -66,6 +66,7 @@ TriesPanel.propTypes = {
     userTries: PropTypes.array.isRequired,
     compTries: PropTypes.array.isRequired,
     handlers: PropTypes.object,
+    discrepVisib: PropTypes.string,
 };
 
 export default TriesPanel;

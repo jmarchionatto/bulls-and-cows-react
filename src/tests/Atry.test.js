@@ -17,6 +17,7 @@ describe('Atry', () => {
                 showRate={true}
                 valsRO={true}
                 rateRO={true}
+                msg={'hola'}
             />
         );
     });

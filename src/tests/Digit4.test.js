@@ -6,13 +6,17 @@ import Digit from '../Digit';
 describe('Digit4', () => {
     let wrapper;
 
-    let digitVals = [4, 5, 6, 7],
-        valsRO = true;
-
-    let onChFn = jest.fn();
+    let digitVals = [4, 5, 6, 7];
 
     beforeEach(() => {
-        wrapper = shallow(<Digit4 digValues={digitVals} readOnly={valsRO} onDigitCh={onChFn} />);
+        wrapper = shallow(
+            <Digit4
+                digitVals={digitVals}
+                readOnly={true}
+                onDigitCh={jest.fn()}
+                refs={[jest.fn()]}
+            />
+        );
     });
 
     // it('has 4 Digit(s) with passed values and readonly values', () => {

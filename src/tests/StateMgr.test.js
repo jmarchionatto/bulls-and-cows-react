@@ -1,10 +1,10 @@
 'use strict';
 
-import * as SU from '../StateUtil';
+import * as SM from '../StateMgr';
 
 it('replLastUserTry', () => {
     let state = {
-        userTries: [SU.emptyUserTry, SU.emptyUserTry, SU.emptyUserTry],
+        userTries: [SM.emptyUserTry, SM.emptyUserTry, SM.emptyUserTry],
     };
 
     const userTry = {
@@ -15,7 +15,7 @@ it('replLastUserTry', () => {
         showRateBtn: true,
     };
 
-    let replState = SU.replLastUserTry(state, userTry);
+    let replState = SM.replLastUserTry(state, userTry);
 
     expect(replState.userTries.slice(0, 2)).toStrictEqual(state.userTries.slice(0, 2));
     expect(replState.userTries.slice(2)[0]).toStrictEqual(userTry);
@@ -23,7 +23,7 @@ it('replLastUserTry', () => {
 
 it('addUserTry', () => {
     let state = {
-        userTries: [SU.emptyUserTry, SU.emptyUserTry],
+        userTries: [SM.emptyUserTry, SM.emptyUserTry],
     };
 
     const userTry = {
@@ -34,7 +34,7 @@ it('addUserTry', () => {
         showRateBtn: true,
     };
 
-    let replState = SU.addUserTry(state, userTry);
+    let replState = SM.addUserTry(state, userTry);
 
     expect(replState.userTries.length).toBe(3);
     expect(replState.userTries.slice(0, 2)).toStrictEqual(state.userTries.slice(0, 2));
@@ -43,15 +43,15 @@ it('addUserTry', () => {
 
 it('addCompTry', () => {
     let state = {
-        compTries: [SU.emptyCompTry, SU.emptyCompTry],
+        compTries: [SM.emptyCompTry, SM.emptyCompTry],
     };
 
     const compTryDigits = [1, 2, 3, 4];
 
-    let replState = SU.addCompTry(state, compTryDigits);
+    let replState = SM.addCompTry(state, compTryDigits);
 
     const expectedLastCompTry = {
-        ...SU.emptyCompTry,
+        ...SM.emptyCompTry,
         digitVals: compTryDigits,
     };
 

@@ -13,14 +13,18 @@ const StH3 = styled.h3`
 `;
 
 class TriesColumn extends React.PureComponent {
-    // componentDidUpdate = () => {
-    //     console.log('TriesColumn -> componentDidUpdate -> try:', this.props.tries);
-    // };
-
     render() {
         let tryElements = [];
         this.props.tries.map((aTry, i) => {
-            tryElements.push(<Atry key={i} try={aTry} handlers={this.props.handlers} />);
+            tryElements.push(
+                <Atry
+                    userOrComp={this.props.userOrComp}
+                    key={i}
+                    try={aTry}
+                    handlers={this.props.handlers}
+                    discrepVisib={this.props.discrepVisib}
+                />
+            );
         });
         return (
             <ColDiv>
@@ -35,6 +39,8 @@ TriesColumn.propTypes = {
     title: PropTypes.string.isRequired,
     tries: PropTypes.array.isRequired,
     handlers: PropTypes.object,
+    userOrComp: PropTypes.string.isRequired,
+    discrepVisib: PropTypes.string,
 };
 
 export default TriesColumn;

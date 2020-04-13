@@ -15,7 +15,7 @@ const DivSt = styled.div`
 
 const UserTriesColumn = props => (
     <DivSt>
-        <TriesColumn title={'Your Tries'} tries={props.tries} handlers={props.handlers} />
+        <TriesColumn userOrComp={'user'} title={'Your Tries'} tries={props.tries} handlers={props.handlers} />
     </DivSt>
 );
 

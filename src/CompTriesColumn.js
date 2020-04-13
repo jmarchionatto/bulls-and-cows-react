@@ -8,20 +8,28 @@ import TriesColumn from './TriesColumn';
  */
 
 const DivSt = styled.div`
-    width: 30em;
+    /* width: 30em; */
+    width: ${(props) => props.width};
     padding: 8px;
     vertical-align: top;
 `;
 
-const CompTriesColumn = props => (
-    <DivSt>
-        <TriesColumn title={'My Tries'} tries={props.tries} handlers={props.handlers} />
+const CompTriesColumn = (props) => (
+    <DivSt width={props.discrepVisib ? '35em' : '30em'}>
+        <TriesColumn
+            userOrComp={'comp'}
+            title={'My Tries'}
+            tries={props.tries}
+            handlers={props.handlers}
+            discrepVisib={props.discrepVisib}
+        />
     </DivSt>
 );
 
 CompTriesColumn.propTypes = {
     tries: PropTypes.array.isRequired,
     handlers: PropTypes.object,
+    discrepVisib: PropTypes.string,
 };
 
 export default CompTriesColumn;

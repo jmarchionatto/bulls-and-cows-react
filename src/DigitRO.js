@@ -19,39 +19,29 @@ const InputTxt = styled.input`
     font-weight: bold;
 `;
 
-class Digit extends React.PureComponent {
+class DigitRO extends React.PureComponent {
     constructor(props) {
         super(props);
         // console.log('Digit -> constructor -> props', props);
     }
-
-    // handleChange = e => {
-    //     this.props.onCh(e, this.props.dn);
-    //     // this.setState({ value: e.target.value });
-    // };
 
     render() {
         return (
             <InputTxt
                 type="text"
                 length="1"
-                value={this.props.value}
+                defaultValue={this.props.value}
                 first={this.props.first}
-                readonly={this.props.readOnly}
-                onChange={(e) => this.props.onCh(e, this.props.dn)}
-                ref={this.props.inptRef}
+                readOnly
             />
         );
     }
 }
 
-Digit.propTypes = {
+DigitRO.propTypes = {
     value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    readOnly: PropTypes.bool,
-    onCh: PropTypes.func.isRequired,
     first: PropTypes.bool,
     dn: PropTypes.string,
-    inptRef: PropTypes.object.isRequired,
 };
 
-export default Digit;
+export default DigitRO;

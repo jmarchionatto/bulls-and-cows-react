@@ -4,7 +4,6 @@ import regeneratorRuntime from 'regenerator-runtime';
 import * as UTIL from './Util';
 import * as SM from './StateMgr';
 import * as CONST from './Const';
-import App from './App';
 
 /**
  * Consolidates all logic about candidate numbers
@@ -89,8 +88,8 @@ export class Logic {
         let rate = this.rateTry(newState.compNumber, currentUserTry.digitVals);
         let newCurrUserTry = {
             ...currentUserTry,
-            rg: rate.good,
-            rr: rate.reg,
+            rg: rate.rg,
+            rr: rate.rr,
             showSendTry: false,
             showRateFlds: true,
         };
@@ -102,7 +101,11 @@ export class Logic {
         let newState = { ...oldState };
         let newCompTry;
         if (this.candidates.length == 0) {
-            newCompTry.msg = 'CONST.MSG_SOME_RATE_WRONG';
+            newCompTry = {
+                ...SM.emptyCompTry,
+                msg: CONST.MSG_SOME_RATE_WRONG,
+                showRateFlds: false,
+            };
         } else {
             let compTryDigits = this.getCandidateArr(oldState);
             newCompTry = {
@@ -110,9 +113,35 @@ export class Logic {
                 digitVals: compTryDigits,
                 showRateFlds: true,
             };
-            newState.compTries = [...newState.compTries, newCompTry];
         }
+        newState.compTries = [...newState.compTries, newCompTry];
         return newState;
+    };
+
+    /**
+     * Received when some user reply were wrong and user submitted number
+     * to be informed which
+     */
+    getNewStateForReceivedCompTry = (oldState) => {
+        let newState = { ...oldState };
+
+        this.showWrongAnswers(newState);
+
+        return newState;
+    };
+
+    showWrongAnswers = (newState) => {
+        console.log('Logic -> showWrongAnswers -> newState start', newState);
+        let digitVals = SM.getCurrentCompTry(newState).digitVals;
+        for (let i = 0; i < newState.compTries.length - 1; i++) {
+            let compTry = newState.compTries[i];
+            let rating = { num: compTry.digitVals, rtg: { rg: compTry.rg, rr: compTry.rr } };
+            if (!UTIL.matchesRating(digitVals, rating)) {
+                compTry.discrep = { rightRate: UTIL.rate(digitVals, compTry.digitVals) };
+            }
+        }
+        newState.discrepVisib = 'visible';
+        console.log('Logic -> showWrongAnswers -> newState end', newState);
     };
 
     getNewCompStateForReceivedRate = (appInst, oldState, rg, rr) => {
@@ -128,7 +157,7 @@ export class Logic {
         // schedule candidate reduction for after update
         const rating = {
             num: UTIL.asNumber(currentCompTry.digitVals),
-            rtg: { good: rg, reg: rr },
+            rtg: { rg, rr },
         };
         appInst.scheduleAfterUpdate(() => {
             this.reduceCandidates(rating);
@@ -143,19 +172,19 @@ export class Logic {
         return newState;
     };
 
-    getNewStateForChangedNumber = (oldState, kValue, fldId) => {
+    getNewStateForChangedNumber = (oldState, kValue, fldId, userOrComp) => {
         let [kType, kIdx] = UTIL.getFldKey(fldId);
 
-        let currentUserTry = SM.getCurrentUserTry(oldState);
+        let currentTry = SM.getCurrentTry(oldState, userOrComp);
 
-        let newUserTry;
+        let newTry;
         if (kValue) {
-            newUserTry = this.handleDigitAdded(currentUserTry, kIdx, kValue);
+            newTry = this.handleDigitAdded(currentTry, kIdx, kValue, userOrComp);
         } else {
             // value removed from field
-            newUserTry = this.handleFieldRemoved(currentUserTry, kType, kIdx);
+            newTry = this.handleFieldRemoved(currentTry, kType, kIdx);
         }
-        let newState = SM.replLastUserTry(oldState, newUserTry);
+        let newState = SM.replLastTry(oldState, userOrComp, newTry);
 
         return newState;
     };
@@ -175,7 +204,13 @@ export class Logic {
         return newState;
     };
 
-    handleDigitAdded(currentUserTry, kIdx, digit) {
+    handleDigitAdded(currentTry, kIdx, digit, userOrComp) {
+        return userOrComp === 'user'
+            ? this.handleUserDigitAdded(currentTry, kIdx, digit)
+            : this.handleCompDigitAdded(currentTry, kIdx, digit);
+    }
+
+    handleUserDigitAdded(currentUserTry, kIdx, digit, userOrComp) {
         let newDigitVals = [...currentUserTry.digitVals];
         newDigitVals[kIdx] = digit;
 
@@ -186,6 +221,22 @@ export class Logic {
 
         // must make submit btn visible?
         if (this.restDigitsSet(currentUserTry, kIdx)) {
+            newTryState.showSendTry = true;
+        }
+        return newTryState;
+    }
+
+    handleCompDigitAdded(currentCompTry, kIdx, digit) {
+        let newDigitVals = [...currentCompTry.digitVals];
+        newDigitVals[kIdx] = digit;
+
+        let newTryState = {
+            ...currentCompTry,
+            digitVals: newDigitVals,
+        };
+
+        // must make submit btn visible?
+        if (this.restDigitsSet(currentCompTry, kIdx)) {
             newTryState.showSendTry = true;
         }
         return newTryState;

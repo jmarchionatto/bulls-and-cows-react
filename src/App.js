@@ -70,15 +70,20 @@ export class App extends React.PureComponent {
         });
     };
 
-    receiveTry = () => {
+    receiveTry = (e, userOrComp) => {
         this.setState((oldState) => {
-            let newState = this.logic.getNewUserStateForReceivedTry(oldState);
+            let newState;
+            if (userOrComp === 'user') {
+                newState = this.logic.getNewUserStateForReceivedTry(oldState);
 
-            if (!oldState.compDone) {
-                newState = this.logic.getNewCompStateForReceivedTry(newState);
+                if (!oldState.compDone) {
+                    newState = this.logic.getNewCompStateForReceivedTry(newState);
+                }
+            } else {
+                newState = this.logic.getNewStateForReceivedCompTry(oldState);
             }
 
-            // console.log('App -> sendTry -> newState', newState);
+            console.log('App -> receiveTry -> newState', newState);
             return newState;
         });
     };
@@ -100,10 +105,10 @@ export class App extends React.PureComponent {
         });
     };
 
-    changeNumberKey = (event, fldId) => {
+    changeNumberKey = (event, fldId, userOrComp) => {
         let kValue = event.target.value;
         this.setState((oldState) => {
-            return this.logic.getNewStateForChangedNumber(oldState, kValue, fldId);
+            return this.logic.getNewStateForChangedNumber(oldState, kValue, fldId, userOrComp);
         });
     };
 

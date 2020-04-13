@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Digit4 from './Digit4';
 import Digit from './Digit';
+import DigitRO from './DigitRO';
 import { FLD_NAMES } from './Const';
 import { getFldKey } from './Util';
 
@@ -15,6 +16,21 @@ const DivTc = styled.div`
     display: table-cell;
     padding: 8px;
     vertical-align: top;
+`;
+
+const RateDiv = styled.div`
+    display: table-cell;
+    visibility: ${(props) => props.visib || 'hidden'};
+`;
+
+const DiscrepDiv = styled.div`
+    display: ${(props) => props.displ || 'none'};
+    visibility: ${(props) => props.visib || 'hidden'};
+`;
+
+const MsgDiv = styled.div`
+    display: table-cell;
+    visibility: ${(props) => props.visib || 'hidden'};
 `;
 
 const SubBtn = styled.button`
@@ -31,10 +47,6 @@ const RateSubBtn = styled.button`
     height: 3em;
     text-align: center;
     border-radius: 10px;
-`;
-
-const RateDiv = styled.div`
-    visibility: ${(props) => props.visib || 'hidden'};
 `;
 
 class Atry extends React.Component {
@@ -55,7 +67,7 @@ class Atry extends React.Component {
 
     sendTry = (e) => {
         // console.log('Atry -> sendTry e', e);
-        this.props.handlers.onSendTry(e);
+        this.props.handlers.onSendTry(e, this.props.userOrComp);
     };
 
     sendRate = (e) => {
@@ -69,7 +81,7 @@ class Atry extends React.Component {
 
         // forward event
         if (kType === 'd') {
-            this.props.handlers.onChangeNumberKey(e, dn);
+            this.props.handlers.onChangeNumberKey(e, dn, this.props.userOrComp);
         } else {
             this.props.handlers.onChangeRateKey(e, dn);
         }
@@ -128,57 +140,99 @@ class Atry extends React.Component {
     };
 
     render() {
+        console.log('Atry -> render -> this.props', this.props);
         return (
-            <DivT>
-                <DivTc>
-                    <SubBtn
-                        type="submit"
-                        visib={this.props.try.showSendTry}
-                        onClick={this.sendTry}
-                        ref={this.sendTryBtnRef}
-                    >
-                        Send Try
-                    </SubBtn>
-                </DivTc>
-                <DivTc>
-                    <Digit4
-                        digitVals={this.props.try.digitVals}
-                        readOnly={this.props.try.valsRO}
-                        onDigitCh={this.onDigitChange}
-                        refs={this.digitRefs}
-                    />
-                </DivTc>
-                <RateDiv visib={this.props.try.showRateFlds}>
+            <div>
+                <MsgDiv visib={this.props.try.msg ? 'visible' : 'hidden'}>
+                    <p>{this.props.try.msg}</p>
+                </MsgDiv>
+                <DivT>
                     <DivTc>
-                        <Digit
-                            value={this.props.try.rg}
-                            readOnly={this.props.try.ratesRO}
-                            onCh={this.onDigitChange}
-                            dn={FLD_NAMES['rg']}
-                            inptRef={this.rgRef}
-                        />
-                    </DivTc>
-                    <DivTc>
-                        <Digit
-                            value={this.props.try.rr}
-                            readOnly={this.props.try.ratesRO}
-                            onCh={this.onDigitChange}
-                            dn={FLD_NAMES['rr']}
-                            inptRef={this.rrRef}
-                        />
-                    </DivTc>
-                    <DivTc>
-                        <RateSubBtn
+                        <SubBtn
                             type="submit"
-                            visib={this.props.try.showRateBtn}
-                            onClick={this.sendRate}
-                            ref={this.sendRateBtnRef}
+                            visib={this.props.try.showSendTry}
+                            onClick={this.sendTry}
+                            ref={this.sendTryBtnRef}
                         >
-                            Rate
-                        </RateSubBtn>
+                            Send Try
+                        </SubBtn>
                     </DivTc>
-                </RateDiv>
-            </DivT>
+                    <DivTc>
+                        <Digit4
+                            digitVals={this.props.try.digitVals}
+                            readOnly={this.props.try.valsRO}
+                            onDigitCh={this.onDigitChange}
+                            refs={this.digitRefs}
+                        />
+                    </DivTc>
+                    <RateDiv visib={this.props.try.showRateFlds}>
+                        <DivTc>
+                            <Digit
+                                value={this.props.try.rg}
+                                readOnly={this.props.try.ratesRO}
+                                onCh={this.onDigitChange}
+                                dn={FLD_NAMES['rg']}
+                                inptRef={this.rgRef}
+                            />
+                        </DivTc>
+                        <DivTc>
+                            <Digit
+                                value={this.props.try.rr}
+                                readOnly={this.props.try.ratesRO}
+                                onCh={this.onDigitChange}
+                                dn={FLD_NAMES['rr']}
+                                inptRef={this.rrRef}
+                            />
+                        </DivTc>
+                        <DivTc>
+                            <RateSubBtn
+                                type="submit"
+                                visib={this.props.try.showRateBtn}
+                                onClick={this.sendRate}
+                                ref={this.sendRateBtnRef}
+                            >
+                                Rate
+                            </RateSubBtn>
+                        </DivTc>
+                    </RateDiv>
+                    <DiscrepDiv
+                        comp={this.props.userOrComp === 'comp'}
+                        displ={
+                            this.props.userOrComp === 'comp' &&
+                            this.props.discrepVisib === 'visible'
+                                ? 'table-cell'
+                                : 'none'
+                        }
+                        visib={
+                            this.props.try.discrep &&
+                            this.props.userOrComp === 'comp' &&
+                            this.props.discrepVisib === 'visible' &&
+                            this.props.try.discrep.rightRate.rg !== ''
+                        }
+                    >
+                        <DivT>
+                            <DivTc>
+                                <DigitRO
+                                    value={
+                                        this.props.try.discrep
+                                            ? this.props.try.discrep.rightRate.rg
+                                            : ''
+                                    }
+                                />
+                            </DivTc>
+                            <DivTc>
+                                <DigitRO
+                                    value={
+                                        this.props.try.discrep
+                                            ? this.props.try.discrep.rightRate.rr
+                                            : ''
+                                    }
+                                />
+                            </DivTc>
+                        </DivT>
+                    </DiscrepDiv>
+                </DivT>
+            </div>
         );
     }
 }
@@ -193,6 +247,9 @@ Atry.propTypes = {
     valsRO: PropTypes.bool,
     ratesRO: PropTypes.bool,
     handlers: PropTypes.object.isRequired,
+    msg: PropTypes.string,
+    userOrComp: PropTypes.string,
+    discrepVisib: PropTypes.string,
 };
 
 Atry.ddefaultProps = {

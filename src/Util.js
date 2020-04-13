@@ -26,13 +26,13 @@ export function matchesRating(n, rating) {
     let rateArr = asNArray(rating.num);
     for (const [nIdx, nDig] of nArr.entries()) {
         for (const [rIdx, rDig] of rateArr.entries()) {
-            if (nDig === rDig) {
+            if (nDig == rDig) {
                 nIdx === rIdx ? good++ : reg++;
             }
         }
     }
     // non-strict tests on purpose
-    return good == rating.rtg.good && reg == rating.rtg.reg;
+    return good == rating.rtg.rg && reg == rating.rtg.rr;
 }
 
 export function rate(nArr, tryArr) {
@@ -52,7 +52,7 @@ export function rate(nArr, tryArr) {
         // console.log('rate -> good, reg', good, reg);
         // console.log('-----------------------');
     }
-    return { good, reg };
+    return { rg: good, rr: reg };
 }
 
 /**

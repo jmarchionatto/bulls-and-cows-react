@@ -7,10 +7,24 @@ export const emptyUserTry = {
 };
 
 export const emptyCompTry = {
+    digitVals: ['', '', '', ''],
     rg: '',
     rr: '',
     showRateBtn: false,
+    discrep: null,
 };
+
+/**
+ * Returns a new state with the received try replacing
+ * the last entry of the received state's userTries
+ * @param {*} state sample state
+ * @param {*} aTry user try to replace last uesrTries entry
+ */
+export function replLastTry(oldState, userOrComp, replTry) {
+    return userOrComp === 'user'
+        ? replLastUserTry(oldState, replTry)
+        : replLastCompTry(oldState, replTry);
+}
 
 /**
  * Returns a new state with the received try replacing
@@ -53,6 +67,10 @@ export function addCompTry(state, compTryDigits) {
         compTries: [...state.compTries, compTry],
     };
     return newState;
+}
+
+export function getCurrentTry(state, userOrComp) {
+    return userOrComp === 'user' ? getCurrentUserTry(state) : getCurrentCompTry(state);
 }
 
 export function getCurrentUserTry(state) {

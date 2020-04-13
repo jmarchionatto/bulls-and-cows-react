@@ -48,8 +48,8 @@ describe('Util', () => {
             const rating = {
                 num: 2751,
                 rtg: {
-                    good: 1,
-                    reg: 2,
+                    rg: 1,
+                    rr: 2,
                 },
             };
             let res = UTIL.matchesRating(3715, rating);
@@ -60,8 +60,8 @@ describe('Util', () => {
             const rating = {
                 num: 2751,
                 rtg: {
-                    good: 1,
-                    reg: 1,
+                    rg: 1,
+                    rr: 1,
                 },
             };
             let res = UTIL.matchesRating(2910, rating);
@@ -72,8 +72,8 @@ describe('Util', () => {
             const rating = {
                 num: 2751,
                 rtg: {
-                    good: 1,
-                    reg: 1,
+                    rg: 1,
+                    rr: 1,
                 },
             };
             let res = UTIL.matchesRating(2710, rating);
