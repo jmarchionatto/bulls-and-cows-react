@@ -78,9 +78,6 @@ export class Logic {
     getNewUserStateForReceivedTry = (oldState) => {
         let newState = { ...oldState };
 
-        // 'think' comp number
-        newState.compNumber = this.getCandidateArr();
-
         // rate try sent and send rate back
         let currentUserTry = SM.getCurrentUserTry(oldState);
         // console.log('App -> sendTry -> currentUserTry.digitVals', currentUserTry.digitVals);
@@ -93,7 +90,12 @@ export class Logic {
             showSendTry: false,
             showRateFlds: true,
         };
+        if (rate.rg == 4) {
+            newCurrUserTry.msg = CONST.MSG_CONGRATS;
+            newState.userDone = true;
+        }
         newState = SM.replLastUserTry(newState, newCurrUserTry);
+
         return newState;
     };
 
@@ -107,7 +109,7 @@ export class Logic {
                 showRateFlds: false,
             };
         } else {
-            let compTryDigits = this.getCandidateArr(oldState);
+            let compTryDigits = this.getCandidateAsArr();
             newCompTry = {
                 ...SM.emptyCompTry,
                 digitVals: compTryDigits,
@@ -276,7 +278,7 @@ export class Logic {
         return true;
     };
 
-    getCandidateArr = () => {
+    getCandidateAsArr = () => {
         return UTIL.asNArray(this.getCandidate());
     };
 

@@ -3,8 +3,6 @@ import AskWhoFirst from './AskWhoFirst';
 import TriesPanel from './TriesPanel';
 import Logic from './Logic';
 import * as SU from './StateMgr';
-import { DEBUG_REDUCING_CANDIDATES } from './Const';
-import * as UTIL from './Util';
 
 export class App extends React.PureComponent {
     constructor(props) {
@@ -26,6 +24,12 @@ export class App extends React.PureComponent {
                 getState: this.getState,
             },
         };
+
+        this.scheduleAfterUpdate(() => {
+            this.setState((oldState) => {
+                oldState.compNumber = this.logic.getCandidateAsArr(); // 'think' comp number
+            });
+        });
     }
 
     componentDidMount() {
@@ -58,12 +62,12 @@ export class App extends React.PureComponent {
     setUserTryFirst = (userTryFirst) => {
         this.setState((oldState) => {
             let newState = {
-                compNumber: this.logic.getCandidateArr(), // 'think' comp number
+                compNumber: this.logic.getCandidateAsArr(), // 'think' comp number
                 userTryFirst: userTryFirst,
                 userTries: userTryFirst ? [SU.emptyUserTry] : [],
             };
             if (userTryFirst) {
-                let compTryDigits = this.logic.getCandidateArr(oldState);
+                let compTryDigits = this.logic.getCandidateAsArr(oldState);
                 SU.addCompTry(newState, compTryDigits);
             }
             return newState;
@@ -98,6 +102,8 @@ export class App extends React.PureComponent {
             if (!oldState.userDone) {
                 newState.userTries = [...oldState.userTries, SU.emptyUserTry];
                 newState.showRateFlds = true;
+            } else {
+                newState = this.logic.getNewCompStateForReceivedTry(newState);
             }
 
             console.log('App -> sendrate newState: ', newState);
