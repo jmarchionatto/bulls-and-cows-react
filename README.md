@@ -1,5 +1,5 @@
 # bulls-and-cows-react
-ulls and cows game JavaScript ES/6 React.js implementation
+Bulls and cows game JavaScript ES/6 React.js implementation
 
 Developed to  practice just learnt React.js
 
