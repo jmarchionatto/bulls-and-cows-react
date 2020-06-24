@@ -5,8 +5,10 @@ import TriesColumn from './TriesColumn';
 
 /**
  * CompTriesColumn is a TriesColumn which showSendTry is always false
+ *
+ * @author Juan Marchionatto
+ *
  */
-
 const DivSt = styled.div`
     /* width: 30em; */
     width: ${(props) => props.width};

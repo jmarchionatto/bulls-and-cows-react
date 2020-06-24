@@ -1,3 +1,10 @@
+/**
+ * Centralizes spplication state, which will be handled
+ * by Redux at a later stage
+ *
+ * @author Juan Marchionatto
+ *
+ */
 export const emptyUserTry = {
     digitVals: ['', '', '', ''],
     rg: '',

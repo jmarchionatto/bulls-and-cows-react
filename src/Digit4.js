@@ -4,6 +4,12 @@ import Digit from './Digit';
 import { FLD_NAMES } from './Const';
 // import styled from 'styled-components';
 
+/**
+ * Four digits component, representing the number of a trial
+ *
+ * @author Juan Marchionatto
+ *
+ */
 const Digit4 = ({ digitVals, readOnly, onDigitCh, refs }) => (
     <div>
         <Digit
@@ -39,7 +45,7 @@ const Digit4 = ({ digitVals, readOnly, onDigitCh, refs }) => (
 );
 
 Digit4.propTypes = {
-    digitVals: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+    digitVals: PropTypes.arrayOf(function (propValue, key, componentName, location, propFullName) {
         const blankOrSingleNumber = RegExp('^(?:\\d{1}|)$');
         if (!blankOrSingleNumber.test(propValue[key])) {
             return new Error(

@@ -19,6 +19,12 @@ const InputTxt = styled.input`
     font-weight: bold;
 `;
 
+/**
+ * One digit component
+ *
+ * @author Juan Marchionatto
+ *
+ */
 class Digit extends React.PureComponent {
     constructor(props) {
         super(props);

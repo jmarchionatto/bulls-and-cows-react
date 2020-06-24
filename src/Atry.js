@@ -49,6 +49,15 @@ const RateSubBtn = styled.button`
     border-radius: 10px;
 `;
 
+/**
+ * Component representing a game try, composed of:
+ * the number its rate, and the submit and rate buttons.
+ * Each independent sub-component visibility and selection
+ * are automatically activated depending on game state
+ *
+ * @author Juan Marchionatto
+ *
+ */
 class Atry extends React.Component {
     constructor(props) {
         super(props);

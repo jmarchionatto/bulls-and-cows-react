@@ -12,6 +12,12 @@ const StH3 = styled.h3`
     text-align: center;
 `;
 
+/**
+ * A component column of tries
+ *
+ * @author Juan Marchionatto
+ *
+ */
 class TriesColumn extends React.PureComponent {
     render() {
         let tryElements = [];

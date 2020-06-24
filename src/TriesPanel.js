@@ -14,6 +14,12 @@ const DivTc = styled.div`
     vertical-align: top;
 `;
 
+/**
+ * A component panel composed of user and comp tries columns
+ *
+ * @author Juan Marchionatto
+ *
+ */
 class TriesPanel extends React.PureComponent {
     // constructor(props) {
     //     super(props);

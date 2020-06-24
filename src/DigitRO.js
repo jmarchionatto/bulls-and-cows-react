@@ -19,6 +19,12 @@ const InputTxt = styled.input`
     font-weight: bold;
 `;
 
+/**
+ * A read-only Digit
+ *
+ * @author Juan Marchionatto
+ *
+ */
 class DigitRO extends React.PureComponent {
     constructor(props) {
         super(props);

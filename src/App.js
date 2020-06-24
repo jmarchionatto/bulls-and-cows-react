@@ -4,6 +4,12 @@ import TriesPanel from './TriesPanel';
 import Logic from './Logic';
 import * as SU from './StateMgr';
 
+/**
+ * Bulls and Cows game application main module
+ *
+ * @author Juan Marchionatto
+ *
+ */
 export class App extends React.PureComponent {
     constructor(props) {
         super(props);

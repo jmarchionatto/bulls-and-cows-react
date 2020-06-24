@@ -5,17 +5,24 @@ import TriesColumn from './TriesColumn';
 
 /**
  * UserTriesColumn is a TriesColumn which showRate is always false
+ *
+ * @author Juan Marchionatto
+ *
  */
-
 const DivSt = styled.div`
     width: 30em;
     padding: 8px;
     vertical-align: top;
 `;
 
-const UserTriesColumn = props => (
+const UserTriesColumn = (props) => (
     <DivSt>
-        <TriesColumn userOrComp={'user'} title={'Your Tries'} tries={props.tries} handlers={props.handlers} />
+        <TriesColumn
+            userOrComp={'user'}
+            title={'Your Tries'}
+            tries={props.tries}
+            handlers={props.handlers}
+        />
     </DivSt>
 );
 

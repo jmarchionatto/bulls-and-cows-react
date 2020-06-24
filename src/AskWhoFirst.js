@@ -14,11 +14,17 @@ const CompBtn = styled.button`
     text-align: right;
 `;
 
+/**
+ * Player order choice widget
+ *
+ * @author Juan Marchionatto
+ *
+ */
 const AskWhoFirst = ({ onSetWhoFirst }) => (
     <StlDiv>
         <h3>Who do you want to play first?</h3>
-        <UserBtn onClick={e => onSetWhoFirst(true, e)}>Me</UserBtn>
-        <CompBtn onClick={e => onSetWhoFirst(false, e)}>You</CompBtn>
+        <UserBtn onClick={(e) => onSetWhoFirst(true, e)}>Me</UserBtn>
+        <CompBtn onClick={(e) => onSetWhoFirst(false, e)}>You</CompBtn>
     </StlDiv>
 );
 

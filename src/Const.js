@@ -1,3 +1,9 @@
+/**
+ * Constants module
+ *
+ * @author Juan Marchionatto
+ *
+ */
 export const DEBUG_REDUCING_CANDIDATES = true;
 
 export const FLD_NAMES = {

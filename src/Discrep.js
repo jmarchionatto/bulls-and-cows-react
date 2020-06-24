@@ -13,6 +13,13 @@ const DivTc = styled.div`
     vertical-align: top;
 `;
 
+/**
+ * Discrepancy component, to display a discrepancy between a user
+ * incorrect reply sent and the correct reply
+ *
+ * @author Juan Marchionatto
+ *
+ */
 class Discrep extends React.PureComponent {
     constructor(props) {
         super(props);

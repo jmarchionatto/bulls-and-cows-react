@@ -8,7 +8,8 @@ import * as CONST from './Const';
 /**
  * Consolidates all logic about candidate numbers
  *
- *@author Juan Marchionatto
+ * @author Juan Marchionatto
+ *
  */
 
 // ratings schema
